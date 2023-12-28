@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import ms from 'ms'
 import { getFaviconURI } from 'utils/getFaviconURI'
 import { isURL } from 'utils/isURL'
+import { FEEDLY_TOKEN } from 'utils/secrets'
 
 export function useFeed(url?: string) {
   const { data, ...rest } = useQuery({
@@ -26,11 +27,12 @@ export const getFeed = async (url: string) => {
       fullTerm: 'false',
       locale: 'en',
       ct: 'feedly.desktop',
+      cv: `31.0.2046`,
+      ck: `${Date.now()}`,
     })}`,
     {
       headers: {
-        authorization:
-          'Bearer A5DxYTCfYNSaAZOleZqEG87C7pvHEcXq2OQTHe1ArvsgGgIWKfQz0mQFUbru73dOnTFq-VPsQu2CiyTx2qW8VWuXZKoRoJS6OyDPCM-uog_KVnLY81yvCskqb6LCawTGkV65rZuXQlmkB_4f3JCOijINSHnaZU94wzoaVXfDRPXSDCBwlC_rQpNfSmXla92X3XJlKvAOS_vDYWfitmY0LkzBfO58KET9IogzhDnYv9eTw_U:feedly',
+        authorization: `Bearer ${FEEDLY_TOKEN}`,
         'content-type': 'application/json',
       },
     },

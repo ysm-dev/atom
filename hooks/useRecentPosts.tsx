@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import ms from 'ms'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { isURL } from 'utils/isURL'
+import { FEEDLY_TOKEN } from 'utils/secrets'
 
 export function useRecentPosts(xmlURL?: string) {
   const { data, ...rest } = useQuery({
@@ -15,8 +16,7 @@ export function useRecentPosts(xmlURL?: string) {
         )}?${new URLSearchParams({ numRecentEntries: '3' })}`,
         {
           headers: {
-            authorization:
-              'Bearer A5DxYTCfYNSaAZOleZqEG87C7pvHEcXq2OQTHe1ArvsgGgIWKfQz0mQFUbru73dOnTFq-VPsQu2CiyTx2qW8VWuXZKoRoJS6OyDPCM-uog_KVnLY81yvCskqb6LCawTGkV65rZuXQlmkB_4f3JCOijINSHnaZU94wzoaVXfDRPXSDCBwlC_rQpNfSmXla92X3XJlKvAOS_vDYWfitmY0LkzBfO58KET9IogzhDnYv9eTw_U:feedly',
+            authorization: `Bearer ${FEEDLY_TOKEN}`,
             'content-type': 'application/json',
           },
         },
