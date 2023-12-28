@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
-import { DISCORD_BOT_TOKEN } from 'utils/env'
+import { env } from 'utils/secrets'
 import { z } from 'zod'
 
 export const channels = new Hono().get(
@@ -24,7 +24,7 @@ export const getChannels = async (guild_id: string): Promise<Channel[]> => {
   const data = await fetch(
     `https://discord.com/api/v10/guilds/${guild_id}/channels`,
     {
-      headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
+      headers: { Authorization: `Bot ${env().DISCORD_BOT_TOKEN}` },
     },
   ).then<Channel[]>((r) => r.json())
 
