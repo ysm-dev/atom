@@ -1,0 +1,39 @@
+name: Job
+
+on:
+  # repository_dispatch:
+  #   types:
+  #     - update
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+
+      - uses: actions/checkout@master
+
+      - run: bun i
+      - run: bunx tsx scripts/crons/index.ts
+
+      - name: Commit report
+        run: |
+          git config --global user.name 'Update'
+          git config --global user.email 'bot@users.noreply.github.com'
+
+          git stash
+
+          git pull
+
+          git stash pop
+
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Update"
+          git push

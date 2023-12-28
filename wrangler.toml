@@ -1,0 +1,17 @@
+name = "atom"
+compatibility_date = "2023-01-01"
+compatibility_flags = ["nodejs_compat"]
+main = "./server/index.ts"
+
+workers_dev = true
+
+[triggers]
+crons = ["* * * * *"]
+
+[build]
+watch_dir = "server"
+
+[vars]
+ENV = "prod"
+
+[dev]

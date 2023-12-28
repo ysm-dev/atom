@@ -1,0 +1,25 @@
+name: Send
+
+on:
+  workflow_run:
+    workflows: [Job]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+
+      - uses: actions/checkout@master
+
+      - run: bun i
+      - run: bunx tsx scripts/crons/send.ts

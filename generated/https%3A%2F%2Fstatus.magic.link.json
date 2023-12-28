@@ -1,0 +1,46 @@
+{
+  "title": "Magic Status - Incident History",
+  "link": "https://status.magic.link",
+  "items": [
+    {
+      "title": "Ethereum Provider Degraded Performance",
+      "link": "https://status.magic.link/incidents/723kkc543gg8"
+    },
+    {
+      "title": "[RESOLVED] Increased Error Rates.",
+      "link": "https://status.magic.link/incidents/gh4nz3yk7v45"
+    },
+    {
+      "title": "Partner Provider Degraded Service",
+      "link": "https://status.magic.link/incidents/f6kwwy7kh3s0"
+    },
+    {
+      "title": "Users unable to login",
+      "link": "https://status.magic.link/incidents/d7z5qqrbm7wc"
+    },
+    {
+      "title": "Elevated Login Errors",
+      "link": "https://status.magic.link/incidents/17zgp7f3ddw7"
+    },
+    {
+      "title": "System Maintenance",
+      "link": "https://status.magic.link/incidents/vqyqlnzmm0nl"
+    },
+    {
+      "title": "Elevated Auth Errors",
+      "link": "https://status.magic.link/incidents/yfj26mllg7bj"
+    },
+    {
+      "title": "Partner Provider Degraded Service",
+      "link": "https://status.magic.link/incidents/xh7yczzrjw3f"
+    },
+    {
+      "title": "Some enterprise email users unable to login",
+      "link": "https://status.magic.link/incidents/q7zp05cmjc2s"
+    },
+    {
+      "title": "Ethereum Provider Degraded Performance",
+      "link": "https://status.magic.link/incidents/k73vvhc43kjs"
+    }
+  ]
+}

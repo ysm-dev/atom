@@ -1,0 +1,46 @@
+{
+  "title": "Stripe Status - Incident History",
+  "link": "https://status.stripe.com",
+  "items": [
+    {
+      "title": "Elevated errors on Interac payments",
+      "link": "https://www.stripestatus.com/incidents/3dsqhksst7th"
+    },
+    {
+      "title": "Elevated API errors",
+      "link": "https://www.stripestatus.com/incidents/ng9kxpt5jb6p"
+    },
+    {
+      "title": "Elevated API errors",
+      "link": "https://www.stripestatus.com/incidents/rkz8vtxrhc0j"
+    },
+    {
+      "title": "Connected account edit page errors",
+      "link": "https://www.stripestatus.com/incidents/bzg3kdsprgwy"
+    },
+    {
+      "title": "Elevated errors with Swish",
+      "link": "https://www.stripestatus.com/incidents/fbcfgj80m4l0"
+    },
+    {
+      "title": "Elevated errors with Swish",
+      "link": "https://www.stripestatus.com/incidents/3bdf466ywrt6"
+    },
+    {
+      "title": "Elevated declines on JPMorgan Chase-issued cards",
+      "link": "https://www.stripestatus.com/incidents/fdhns4bp8hxg"
+    },
+    {
+      "title": "Dashboard export errors",
+      "link": "https://www.stripestatus.com/incidents/rddflgkvwldl"
+    },
+    {
+      "title": "Dashboard loading errors",
+      "link": "https://www.stripestatus.com/incidents/qt96hmx07jgz"
+    },
+    {
+      "title": "Elevated PayNow errors",
+      "link": "https://www.stripestatus.com/incidents/vvtqrq5wl1mz"
+    }
+  ]
+}
