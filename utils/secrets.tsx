@@ -2,7 +2,7 @@ import { type Context } from 'hono'
 import { env as honoENV } from 'hono/adapter'
 
 // Front
-export const SECRET = process.env.NEXT_PUBLIC_SECRET
+export const SECRET = `zH4NRP1HMALxxCFnRZABFA7GOJtzU_gIj02alfL1lva`
 
 export const GLOBAL: {
   c: Context
