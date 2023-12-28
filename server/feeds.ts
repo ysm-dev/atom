@@ -48,7 +48,7 @@ export const feeds = new Hono()
       const [webhooks, channels, feeds] = await Promise.all([
         getWebhooks(guild_id),
         getChannels(guild_id),
-        storage.getItem<Channels>(`feeds:${guild_id}`),
+        storage().getItem<Channels>(`feeds:${guild_id}`),
       ])
 
       const data: Channels = await pipe(
@@ -85,7 +85,7 @@ export const feeds = new Hono()
       const { guild_id } = c.req.valid('param')
       const { channels } = c.req.valid('json')
 
-      await storage.setItem<Channels>(`feeds:${guild_id}`, channels)
+      await storage().setItem<Channels>(`feeds:${guild_id}`, channels)
 
       return c.json(channels)
     },

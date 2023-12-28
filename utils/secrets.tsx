@@ -1,5 +1,5 @@
 import { type Context } from 'hono'
-import { getRuntimeKey, env as honoENV } from 'hono/adapter'
+import { env as honoENV } from 'hono/adapter'
 
 // Front
 export const SECRET = `zH4NRP1HMALxxCFnRZABFA7GOJtzU_gIj02alfL1lva`
@@ -9,8 +9,6 @@ export const GLOBAL: {
 } = {
   c: null as unknown as Context,
 }
-
-console.log('Runtime: ', getRuntimeKey())
 
 export const env = () => honoENV<ENV>(GLOBAL.c)
 

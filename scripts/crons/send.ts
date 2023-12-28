@@ -29,7 +29,7 @@ type History = {
 async function main() {
   // eslint-disable-next-line prefer-const
   let [feeds] = await Promise.all([
-    storage.getItem<Channels>(`feeds:${guild_id}`),
+    storage().getItem<Channels>(`feeds:${guild_id}`),
   ])
 
   if (!feeds) {
@@ -142,7 +142,7 @@ async function main() {
 
   console.log(history)
 
-  await storage.setItem<History>(`history:${guild_id}`, history)
+  await storage().setItem<History>(`history:${guild_id}`, history)
 }
 
 main()

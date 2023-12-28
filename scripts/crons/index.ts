@@ -8,7 +8,7 @@ import { $ } from 'zx'
 const guild_id = `1166351747346870372`
 
 async function main() {
-  const data = await storage.getItem<Channels>(`feeds:${guild_id}`)
+  const data = await storage().getItem<Channels>(`feeds:${guild_id}`)
 
   if (!data) {
     throw new Error(`No data found for guild ${guild_id}`)
