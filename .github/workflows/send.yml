@@ -31,11 +31,7 @@ jobs:
           git config --global user.name 'Update State'
           git config --global user.email 'bot@users.noreply.github.com'
 
-          git stash
-
-          git pull
-
-          git stash pop
+          git diff-index --quiet HEAD || git stash && git pull && git stash pop
 
           git add .
           git diff-index --quiet HEAD || git commit -m "Update State"
