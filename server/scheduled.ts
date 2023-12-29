@@ -1,4 +1,3 @@
-import ms from 'ms'
 import { env } from 'utils/secrets'
 
 export const scheduled: ExportedHandlerScheduledHandler = async (
@@ -8,14 +7,15 @@ export const scheduled: ExportedHandlerScheduledHandler = async (
 ) => {
   console.log('Run scheduled task')
 
-  ctx.waitUntil(
-    // eslint-disable-next-line no-async-promise-executor
-    new Promise(async (resolve) => {
-      await wait(ms('30s'))
-      await run()
-      resolve(null)
-    }),
-  )
+  // ctx.waitUntil(
+  //   new Promise(async (resolve) => {
+  //     await wait(ms('30s'))
+  //     await run()
+  //     resolve(null)
+  //   }),
+  // )
+
+  console.log(env().GITHUB_PAT)
 
   await run()
 }
