@@ -16,7 +16,7 @@ export default function RootLayout({ children }: Props) {
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
       </head>
-      <body className="dark">
+      <body className="scrollbar-hide dark">
         <Toaster
           // expand
           // duration={100000}
