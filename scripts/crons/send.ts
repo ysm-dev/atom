@@ -9,11 +9,14 @@ import {
   toAsync,
   values,
 } from '@fxts/core'
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { type Channels } from 'server/feeds'
+import { parse, stringify } from 'superjson'
+import { binaryToText, textToBinary } from 'utils/binary'
 import { storage } from 'utils/storage'
+import { toCID } from 'utils/toCID'
 
 const guild_id = `1166351747346870372`
 
@@ -28,7 +31,7 @@ type History = {
 
 async function main() {
   // eslint-disable-next-line prefer-const
-  let [feeds] = await Promise.all([
+  const [feeds] = await Promise.all([
     storage().getItem<Channels>(`feeds:${guild_id}`),
   ])
 
@@ -43,7 +46,7 @@ async function main() {
     toAsync,
     map(async (ch) => {
       const webhookURL = ch.webhookURL!
-      const { feeds, id: channel_id } = ch
+      const { feeds, id: channel_id, name } = ch
 
       await pipe(
         feeds,
@@ -51,14 +54,11 @@ async function main() {
         toAsync,
         filter(({ enabled }) => enabled),
         map(async ({ url, xmlURL, favicon }) => {
-          const [json, state] = await Promise.all([
-            readFile(
-              `./generated/${encodeURIComponent(url)}.json`,
-              'utf-8',
-            ).catch(() => null),
-            readFile(`./state/${encodeURIComponent(url)}.json`, 'utf-8').catch(
-              () => null,
-            ),
+          const cid = await toCID(url)
+
+          const [json, stateString] = await Promise.all([
+            readFile(`./generated/${cid}.bin`, 'utf-8').catch(() => null),
+            readFile(`./state/${cid}.bin`, 'utf-8').catch(() => null),
           ])
 
           let result: {
@@ -81,7 +81,22 @@ async function main() {
               })),
             }
           } else {
-            result = JSON.parse(json)
+            result = parse(binaryToText(json)) as any
+          }
+
+          let state: {
+            [channel_id: string]: {
+              [url: string]: {
+                title: string
+                link: string
+              }[]
+            }
+          }
+
+          if (stateString) {
+            state = parse(binaryToText(stateString)) as any
+          } else {
+            state = {}
           }
 
           const { title, link, items } = result
@@ -91,11 +106,11 @@ async function main() {
             // filter out from first match
             slice(
               0,
-              history?.[channel_id]?.[url] == null ||
-                history?.[channel_id]?.[url].length === 0
+              state?.[channel_id]?.[url] == null ||
+                state?.[channel_id]?.[url].length === 0
                 ? items.length
                 : items.findIndex(
-                    ({ link }) => history?.[channel_id]?.[url][0].link === link,
+                    ({ link }) => state?.[channel_id]?.[url][0].link === link,
                   ),
             ),
             toAsync,
@@ -110,23 +125,28 @@ async function main() {
                 avatar_url: favicon,
                 content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
               })
+
+              console.log(`Sent ${itemLink} to ${name}`)
             }),
             concurrent(1),
             toArray,
           )
 
-          if (!history) {
-            history = {
+          if (!state) {
+            state = {
               [channel_id]: {
                 [url]: [...items].map(({ title, link }) => ({ title, link })),
               },
             }
           } else {
-            history[channel_id] = {
-              ...history[channel_id],
+            state[channel_id] = {
+              ...state[channel_id],
               [url]: [...items].map(({ title, link }) => ({ title, link })),
             }
           }
+
+          // write state to local file
+          await writeFile(`./state/${cid}.bin`, textToBinary(stringify(state)))
         }),
         concurrent(10),
         toArray,
@@ -135,14 +155,6 @@ async function main() {
     concurrent(10),
     toArray,
   )
-
-  if (!history) {
-    return
-  }
-
-  console.log(history)
-
-  await storage().setItem<History>(`history:${guild_id}`, history)
 }
 
 main()

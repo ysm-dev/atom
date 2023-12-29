@@ -38,6 +38,7 @@
     "js-cookie": "3.0.5",
     "lucide-react": "0.302.0",
     "ms": "3.0.0-canary.1",
+    "multiformats": "13.0.0",
     "next": "14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

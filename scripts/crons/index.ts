@@ -2,7 +2,10 @@ import { concurrent, map, pipe, toArray, toAsync, values } from '@fxts/core'
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { type Channels } from 'server/feeds'
+import { stringify } from 'superjson'
+import { textToBinary } from 'utils/binary'
 import { storage } from 'utils/storage'
+import { toCID } from 'utils/toCID'
 import { $ } from 'zx'
 
 const guild_id = `1166351747346870372`
@@ -35,19 +38,19 @@ async function main() {
 
           const { title, items } = await parseString(txt)
 
-          const json = JSON.stringify(
-            {
+          const bin = textToBinary(
+            stringify({
               title,
               link: url,
               items: items
                 .slice(0, 10)
                 .map(({ title, link }) => ({ title, link })),
-            },
-            null,
-            2,
+            }),
           )
 
-          await writeFile(`./generated/${encodeURIComponent(url)}.json`, json)
+          const cid = await toCID(url)
+
+          await writeFile(`./generated/${cid}.bin`, bin)
         }),
         concurrent(10),
         toArray,
