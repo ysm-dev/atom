@@ -1,3 +1,5 @@
+import { wait } from 'utils/wait'
+
 export const sendDiscordMessage = (
   webhookURL: string,
   message: string | object,
@@ -11,9 +13,15 @@ export const sendDiscordMessage = (
       typeof message === 'string' ? { content: message } : message,
     ),
   })
-    .then<Response>((r) => r.json())
-    .catch((e) => {
+    .then<Response>(async (r) => {
+      if (r.status === 429) {
+        await wait(500)
+      }
+      return r.json()
+    })
+    .catch(async (e) => {
       console.error('Failed to send Discord message', message)
+      await wait(500)
       return sendDiscordMessage(webhookURL, message)
     })
 }

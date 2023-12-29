@@ -14,8 +14,6 @@ export const scheduled: ExportedHandlerScheduledHandler = async (
   )
 }
 
-const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
-
 const run = async (PAT: string) => {
   await Promise.all([
     fetch(`https://api.github.com/repos/ysm-dev/atom/dispatches`, {
