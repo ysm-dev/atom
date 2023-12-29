@@ -25,11 +25,9 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Pull
-        run: git diff-index --quiet HEAD || (git stash && git pull && git stash pop)
-
       - uses: EndBug/add-and-commit@main
         with:
           author_name: Bot
           author_email: bot@users.noreply.github.com
           message: Update Data
+          pull: '--rebase --autostash'
