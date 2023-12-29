@@ -1,9 +1,9 @@
 export const scheduled: ExportedHandlerScheduledHandler = async (
   controller: ScheduledController,
-  env: any,
+  { GITHUB_PAT }: any,
   ctx: ExecutionContext,
 ) => {
-  console.log('Run scheduled task')
+  console.log(`Run scheduled task: ${GITHUB_PAT}`)
 
   // ctx.waitUntil(
   //   new Promise(async (resolve) => {
@@ -13,7 +13,7 @@ export const scheduled: ExportedHandlerScheduledHandler = async (
   //   }),
   // )
 
-  await run(env.GITHUB_PAT)
+  await run(GITHUB_PAT)
 }
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
