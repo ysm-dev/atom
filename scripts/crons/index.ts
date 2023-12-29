@@ -1,4 +1,12 @@
-import { concurrent, map, pipe, toArray, toAsync, values } from '@fxts/core'
+import {
+  concurrent,
+  filter,
+  map,
+  pipe,
+  toArray,
+  toAsync,
+  values,
+} from '@fxts/core'
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { type Channels } from 'server/feeds'
@@ -30,6 +38,7 @@ async function main() {
       await pipe(
         feeds,
         values,
+        filter(({ enabled }) => enabled),
         toAsync,
         map(async ({ url, xmlURL }) => {
           console.log(xmlURL)
