@@ -1,5 +1,27 @@
+import { getFeed } from 'hooks/useFeed'
+import { getRecentPosts } from 'hooks/useRecentPosts'
 import Parser from 'rss-parser'
 
 const parser = new Parser()
 
-export const parseString = parser.parseString.bind(parser)
+type Params = {
+  xml: string
+  url: string
+  xmlURL: string
+}
+
+export const parseString = async ({ xml, url, xmlURL }: Params) => {
+  return parser.parseString
+    .bind(parser)(xml)
+    .catch(async () => {
+      const [feed, items] = await Promise.all([
+        getFeed(url),
+        getRecentPosts(xmlURL),
+      ])
+
+      return {
+        title: feed?.title,
+        items,
+      }
+    })
+}

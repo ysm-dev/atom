@@ -8,7 +8,7 @@ import {
   values,
 } from '@fxts/core'
 import { writeFile } from 'fs/promises'
-import { parseRSS } from 'lib/parseRSS'
+import { parseString } from 'lib/parseString'
 import { type Channels } from 'server/feeds'
 import { stringify } from 'superjson'
 import { textToBinary } from 'utils/binary'
@@ -42,9 +42,13 @@ async function main() {
         toAsync,
         map(async ({ url, xmlURL }) => {
           console.log(xmlURL)
-          const txt = await fetch(xmlURL).then((r) => r.text())
+          const xml = await fetch(xmlURL).then((r) => r.text())
 
-          const { title, items } = await parseRSS(txt)
+          const { title, items } = await parseString({
+            xml,
+            url,
+            xmlURL,
+          })
 
           const bin = textToBinary(
             stringify({

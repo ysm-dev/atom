@@ -10,7 +10,7 @@ import {
   values,
 } from '@fxts/core'
 import { readFile, writeFile } from 'fs/promises'
-import { parseRSS } from 'lib/parseRSS'
+import { parseString } from 'lib/parseString'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { type Channels } from 'server/feeds'
 import { parse, stringify } from 'superjson'
@@ -70,9 +70,13 @@ async function main() {
           }
 
           if (!json) {
-            const txt = await fetch(xmlURL).then((r) => r.text())
+            const xml = await fetch(xmlURL).then((r) => r.text())
 
-            const { title, items } = await parseRSS(txt)
+            const { title, items } = await parseString({
+              xml,
+              url,
+              xmlURL,
+            })
 
             result = {
               title: title!,
