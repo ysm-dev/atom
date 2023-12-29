@@ -3,16 +3,15 @@ import ms from 'ms'
 export const scheduled: ExportedHandlerScheduledHandler = async (
   controller: ScheduledController,
   { GITHUB_PAT }: any,
-  { waitUntil }: ExecutionContext,
+  ctx: ExecutionContext,
 ) => {
   console.log(`Run scheduled task: ${GITHUB_PAT}`)
 
-  waitUntil(
-    new Promise(async (resolve) => {
+  ctx.waitUntil(
+    (async () => {
       await wait(ms('30s'))
       await run(GITHUB_PAT)
-      resolve(null)
-    }),
+    })(),
   )
 
   await run(GITHUB_PAT)
