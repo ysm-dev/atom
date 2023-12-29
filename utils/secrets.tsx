@@ -14,7 +14,7 @@ export const GLOBAL: {
 }
 
 export const env = () => {
-  if (!isServer() || getRuntimeKey() === 'bun') {
+  if (!isServer() || getRuntimeKey() !== 'workerd') {
     return global?.process?.env as unknown as ENV
   }
 
