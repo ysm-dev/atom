@@ -45,6 +45,12 @@ export const getFaviconURI = (url: string): string => {
     return `https://img.ysm.dev/youtube/${handle}`
   }
 
+  if (host.includes(`blog.naver.com`)) {
+    const [, handle] = pathname.split('/')
+
+    return `https://img.ysm.dev/naver/${handle}`
+  }
+
   if (host === 'rss.ysm.dev') {
     if (pathname.split('/')[2]?.includes('.')) {
       return `https://app.ray.st/api/favicon/${pathname.split('/')[2]}`

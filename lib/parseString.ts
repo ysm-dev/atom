@@ -1,6 +1,7 @@
 import { getFeed } from 'hooks/useFeed'
 import { getRecentPosts } from 'hooks/useRecentPosts'
 import Parser from 'rss-parser'
+import { decodeHTMLEntities } from 'utils/decodeHtml'
 
 const parser = new Parser()
 
@@ -20,7 +21,7 @@ export const parseString = async ({ xml, url, xmlURL }: Params) => {
       ])
 
       return {
-        title: feed?.title,
+        title: feed?.title ? decodeHTMLEntities(feed.title) : 'No Title',
         items,
       }
     })

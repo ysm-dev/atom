@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import ms from 'ms'
+import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getFaviconURI } from 'utils/getFaviconURI'
 import { isURL } from 'utils/isURL'
 import { FEEDLY_TOKEN } from 'utils/secrets'
@@ -48,7 +49,7 @@ export const getFeed = async (url: string) => {
     url,
     xmlURL: result.feedId.replace('feed/', ''),
     htmlURL: result.website,
-    title: result.title,
+    title: decodeHTMLEntities(result.title),
     description: result.description,
     favicon: await getFaviconURI(url!),
   }
