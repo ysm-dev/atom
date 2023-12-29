@@ -1,5 +1,3 @@
-import { env } from 'utils/secrets'
-
 export const scheduled: ExportedHandlerScheduledHandler = async (
   controller: ScheduledController,
   env: any,
@@ -15,20 +13,18 @@ export const scheduled: ExportedHandlerScheduledHandler = async (
   //   }),
   // )
 
-  console.log(env().GITHUB_PAT)
-
-  await run()
+  await run(env.GITHUB_PAT)
 }
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-const run = async () => {
+const run = async (PAT: string) => {
   await Promise.all([
     fetch(`https://api.github.com/repos/ysm-dev/atom/dispatches`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `token ${env().GITHUB_PAT}`,
+        Authorization: `token ${PAT}`,
         Accept: 'application/vnd.github+json',
         'User-Agent': 'insomnia/8.4.5',
       },
