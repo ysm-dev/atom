@@ -20,7 +20,7 @@ import { toCID } from 'utils/toCID'
 
 const guild_id = `1166351747346870372`
 
-type History = {
+type State = {
   [channel_id: string]: {
     [url: string]: {
       title: string
@@ -84,14 +84,7 @@ async function main() {
             result = parse(binaryToText(json)) as any
           }
 
-          let state: {
-            [channel_id: string]: {
-              [url: string]: {
-                title: string
-                link: string
-              }[]
-            }
-          }
+          let state: State
 
           if (stateString) {
             state = parse(binaryToText(stateString)) as any
