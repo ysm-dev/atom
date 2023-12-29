@@ -8,7 +8,7 @@ import {
   values,
 } from '@fxts/core'
 import { writeFile } from 'fs/promises'
-import { parseString } from 'lib/parseString'
+import { parseRSS } from 'lib/parseRSS'
 import { type Channels } from 'server/feeds'
 import { stringify } from 'superjson'
 import { textToBinary } from 'utils/binary'
@@ -44,7 +44,7 @@ async function main() {
           console.log(xmlURL)
           const txt = await fetch(xmlURL).then((r) => r.text())
 
-          const { title, items } = await parseString(txt)
+          const { title, items } = await parseRSS(txt)
 
           const bin = textToBinary(
             stringify({
