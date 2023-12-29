@@ -15,14 +15,12 @@ import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { type Channels } from 'server/feeds'
 import { parse, stringify } from 'superjson'
 import { binaryToText, textToBinary } from 'utils/binary'
+import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
 
 // ysm's server
 // const guild_id = `1166351747346870372`
-
-// Chris
-export const guild_id = `943160510814232576`
 
 type State = {
   [channel_id: string]: {
@@ -36,11 +34,11 @@ type State = {
 async function main() {
   // eslint-disable-next-line prefer-const
   const [feeds] = await Promise.all([
-    storage().getItem<Channels>(`feeds:${guild_id}`),
+    storage().getItem<Channels>(`feeds:${GUILD_ID}`),
   ])
 
   if (!feeds) {
-    throw new Error(`No data found for guild ${guild_id}`)
+    throw new Error(`No data found for guild ${GUILD_ID}`)
   }
 
   await pipe(

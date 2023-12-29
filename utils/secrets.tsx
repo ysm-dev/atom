@@ -7,6 +7,8 @@ export const SECRET = `zH4NRP1HMALxxCFnRZABFA7GOJtzU_gIj02alfL1lva`
 
 export const FEEDLY_TOKEN = `A9re6tTahlzJAcR859DalS4auLXbRKRqXSyAIHJJ9xpYrXtjtj5bvPBOnsfRpLqD8H5dj7WpxSgG5n6N-q0A5izS4V9spsePDCuoQzsVO2kVpnZGXkaw4N9fPiPwopmOvhDRvxZ6QMDfrGAGV52w3nkfdWWgk_2xAhF_qhWvyAHaxuS4u6nt7jUSG9qN1bd5VnriSfo1FZantcuDBQfsTRCqqXZXq6703QIsbWi2d8Y1jQ:feedly`
 
+export const GUILD_ID = `943160510814232576`
+
 export const GLOBAL: {
   c: Context
 } = {

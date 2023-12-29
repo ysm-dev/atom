@@ -1,19 +1,19 @@
 import { concurrent, map, pipe, toArray, toAsync, values } from '@fxts/core'
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
-import { guild_id } from 'scripts/crons/send'
 import { type Channels } from 'server/feeds'
 import { stringify } from 'superjson'
 import { textToBinary } from 'utils/binary'
+import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
 import { $ } from 'zx'
 
 async function main() {
-  const data = await storage().getItem<Channels>(`feeds:${guild_id}`)
+  const data = await storage().getItem<Channels>(`feeds:${GUILD_ID}`)
 
   if (!data) {
-    throw new Error(`No data found for guild ${guild_id}`)
+    throw new Error(`No data found for guild ${GUILD_ID}`)
   }
 
   // remove all files in generated
