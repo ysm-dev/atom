@@ -1,7 +1,7 @@
 export const sendDiscordMessage = (
   webhookURL: string,
   message: string | object,
-) => {
+): Promise<Response> => {
   return fetch(`${webhookURL}?${new URLSearchParams({ wait: 'true' })}`, {
     method: 'POST',
     headers: {
@@ -14,6 +14,7 @@ export const sendDiscordMessage = (
     .then<Response>((r) => r.json())
     .catch((e) => {
       console.error('Failed to send Discord message', message)
+      return sendDiscordMessage(webhookURL, message)
     })
 }
 
