@@ -1,14 +1,13 @@
 import { concurrent, map, pipe, toArray, toAsync, values } from '@fxts/core'
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
+import { guild_id } from 'scripts/crons/send'
 import { type Channels } from 'server/feeds'
 import { stringify } from 'superjson'
 import { textToBinary } from 'utils/binary'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
 import { $ } from 'zx'
-
-const guild_id = `1166351747346870372`
 
 async function main() {
   const data = await storage().getItem<Channels>(`feeds:${guild_id}`)

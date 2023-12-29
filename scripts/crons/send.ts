@@ -18,7 +18,11 @@ import { binaryToText, textToBinary } from 'utils/binary'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
 
-const guild_id = `1166351747346870372`
+// ysm's server
+// const guild_id = `1166351747346870372`
+
+// Chris
+export const guild_id = `943160510814232576`
 
 type State = {
   [channel_id: string]: {
