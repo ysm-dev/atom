@@ -9,12 +9,11 @@ export const scheduled: ExportedHandlerScheduledHandler = async (
 
   ctx.waitUntil(
     (async () => {
+      await run(GITHUB_PAT)
       await wait(ms('30s'))
       await run(GITHUB_PAT)
     })(),
   )
-
-  await run(GITHUB_PAT)
 }
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -32,7 +31,7 @@ const run = async (PAT: string) => {
       body: JSON.stringify({
         event_type: 'update',
       }),
-    }).catch((e) => console.log(e)),
+    }),
     // fetch('https://api.github.com/repos/ysm-dev/atom/dispatches', {
     //   method: 'POST',
     //   headers: {
