@@ -40,7 +40,7 @@ export const getFaviconURI = (url: string): string => {
   }
 
   if (host.includes('youtube.com')) {
-    const handle = searchParams.get('channel_id')
+    const handle = pathname.split('/')[1].replace('@', '')
 
     return `https://img.ysm.dev/youtube/${handle}`
   }
