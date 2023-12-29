@@ -35,7 +35,7 @@ const run = async () => {
       body: JSON.stringify({
         event_type: 'update',
       }),
-    }),
+    }).catch((e) => console.log(e)),
     // fetch('https://api.github.com/repos/ysm-dev/atom/dispatches', {
     //   method: 'POST',
     //   headers: {
