@@ -1,5 +1,3 @@
-import ms from 'ms'
-
 export const scheduled: ExportedHandlerScheduledHandler = async (
   controller: ScheduledController,
   { GITHUB_PAT }: any,
@@ -9,8 +7,8 @@ export const scheduled: ExportedHandlerScheduledHandler = async (
 
   ctx.waitUntil(
     (async () => {
-      await run(GITHUB_PAT)
-      await wait(ms('30s'))
+      // await run(GITHUB_PAT)
+      // await wait(ms('30s'))
       await run(GITHUB_PAT)
     })(),
   )
