@@ -13,7 +13,7 @@ export function useRecentPosts(xmlURL?: string) {
       const data = await fetch(
         `https://api.feedly.com/v3/feeds/feed%2F${encodeURIComponent(
           xmlURL!,
-        )}?${new URLSearchParams({ numRecentEntries: '3' })}`,
+        )}?${new URLSearchParams({ numRecentEntries: '100' })}`,
         {
           headers: {
             authorization: `Bearer ${FEEDLY_TOKEN}`,
@@ -22,10 +22,12 @@ export function useRecentPosts(xmlURL?: string) {
         },
       ).then<R>((r) => r.json())
 
-      return data.recentEntries.map((e) => ({
-        link: e.canonicalUrl ?? e.alternate?.[0]?.href ?? e.originId,
-        title: decodeHTMLEntities(e.title),
-      }))
+      return data.recentEntries
+        .sort((a, b) => b.published - a.published)
+        .map((e) => ({
+          link: e.canonicalUrl ?? e.alternate?.[0]?.href ?? e.originId,
+          title: decodeHTMLEntities(e.title),
+        }))
     },
     enabled: !!xmlURL && isURL(xmlURL),
     staleTime: ms('1h'),
