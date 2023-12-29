@@ -120,6 +120,8 @@ async function main() {
               })
 
               console.log(`Sent ${itemLink} to ${name}`)
+
+              return { title: itemTitle, link: itemLink }
             }),
             concurrent(1),
             toArray,
@@ -139,8 +141,14 @@ async function main() {
           }
 
           // write state to local file
-          console.log(`Writing state for ${url}`)
-          await writeFile(`./state/${cid}.bin`, textToBinary(stringify(state)))
+          if (diff.length > 0) {
+            console.log(`Writing state for ${url}`)
+
+            await writeFile(
+              `./state/${cid}.bin`,
+              textToBinary(stringify(state)),
+            )
+          }
         }),
         concurrent(10),
         toArray,
