@@ -26,9 +26,12 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Commit state
+      - name: pull
         run: |
-          git config --global user.name 'Update State'
-          git config --global user.email 'bot@users.noreply.github.com'
+          git diff-index --quiet HEAD || git stash && git pull && git stash pop
 
-          git diff-index --quiet HEAD || git stash && git pull && git stash pop && git add . && git commit -m "Update State" && git push
+      - uses: EndBug/add-and-commit@main
+        with:
+          author_name: Bot
+          author_email: bot@users.noreply.github.com
+          message: Update State
