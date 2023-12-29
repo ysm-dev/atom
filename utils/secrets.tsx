@@ -1,5 +1,5 @@
 import { type Context } from 'hono'
-import { getRuntimeKey, env as honoENV } from 'hono/adapter'
+import { env as honoENV } from 'hono/adapter'
 import { isServer } from 'utils/isServer'
 
 // Front
@@ -14,7 +14,7 @@ export const GLOBAL: {
 }
 
 export const env = () => {
-  if (!isServer() || getRuntimeKey() !== 'workerd') {
+  if (!isServer()) {
     return global?.process?.env as unknown as ENV
   }
 

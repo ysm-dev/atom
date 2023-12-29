@@ -23,3 +23,5 @@ jobs:
 
       - run: bun i
       - run: bunx tsx scripts/crons/send.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
