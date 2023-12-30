@@ -42,7 +42,14 @@ async function main() {
         toAsync,
         map(async ({ url, xmlURL }) => {
           console.log(xmlURL)
-          const xml = await fetch(xmlURL).then((r) => r.text())
+          const xml = await fetch(xmlURL)
+            .then((r) => r.text())
+            .catch(() => null)
+
+          if (!xml) {
+            console.log(`Failed!!: `, xmlURL)
+            return
+          }
 
           const { title, items } = await parseString({
             xml,
