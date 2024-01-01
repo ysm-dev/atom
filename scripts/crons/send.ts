@@ -55,7 +55,7 @@ async function main() {
         values,
         toAsync,
         filter(({ enabled }) => enabled),
-        map(async ({ url, xmlURL, favicon }) => {
+        map(async ({ url, ...rest }) => {
           const cid = await toCID(url)
 
           const [json, stateString] = await Promise.all([
@@ -63,6 +63,17 @@ async function main() {
             readFile(`./state/${cid}.bin`, 'utf-8').catch(() => null),
           ])
 
+          return {
+            url,
+            cid,
+            ...rest,
+            json,
+            stateString,
+          }
+        }),
+        toArray,
+        toAsync,
+        map(async ({ url, xmlURL, favicon, cid, json, stateString }) => {
           let result: {
             title: string
             link: string
@@ -156,11 +167,11 @@ async function main() {
             )
           }
         }),
-        concurrent(10),
+        concurrent(100),
         toArray,
       )
     }),
-    concurrent(10),
+    concurrent(100),
     toArray,
   )
 }

@@ -42,13 +42,13 @@ async function main() {
         filter(({ enabled }) => enabled),
         toAsync,
         map(async ({ url, xmlURL }) => {
-          console.log(xmlURL)
+          // console.log(xmlURL)
           const xml = await fetch(xmlURL)
             .then((r) => r.text())
             .catch(() => null)
 
           if (!xml) {
-            console.log(`Failed!!: `, xmlURL)
+            console.log(`Failed!!: `, url, xmlURL)
             return
           }
 
@@ -73,15 +73,15 @@ async function main() {
 
           await writeFile(`./generated/${cid}.bin`, bin)
         }),
-        concurrent(10),
+        concurrent(100),
         toArray,
       )
     }),
-    concurrent(10),
+    concurrent(100),
     toArray,
   )
 
-  console.log(data)
+  // console.log(data)
 }
 
 main()
