@@ -73,11 +73,11 @@ async function main() {
 
           await writeFile(`./generated/${cid}.bin`, bin)
         }),
-        concurrent(100),
+        concurrent(20),
         toArray,
       )
     }),
-    concurrent(100),
+    concurrent(10),
     toArray,
   )
 

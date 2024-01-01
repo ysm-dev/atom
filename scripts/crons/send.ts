@@ -15,6 +15,7 @@ import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { type Channels } from 'server/feeds'
 import { parse, stringify } from 'superjson'
 import { binaryToText, textToBinary } from 'utils/binary'
+import { isURL } from 'utils/isURL'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
@@ -94,11 +95,15 @@ async function main() {
               link: url,
               items: items.slice(0, 10).map(({ title, link }) => ({
                 title: title!,
-                link: link!,
+                link: isURL(link) ? link! : `${new URL(url).origin}${link}`,
               })),
             }
           } else {
             result = parse(binaryToText(json)) as any
+          }
+
+          if (url.startsWith(`https://muan.co/`)) {
+            console.log(result)
           }
 
           let state: State
@@ -147,13 +152,19 @@ async function main() {
           if (!state) {
             state = {
               [channel_id]: {
-                [url]: [...items].map(({ title, link }) => ({ title, link })),
+                [url]: [...items].map(({ title, link }) => ({
+                  title,
+                  link: isURL(link) ? link : `${new URL(url).origin}${link}`,
+                })),
               },
             }
           } else {
             state[channel_id] = {
               ...state[channel_id],
-              [url]: [...items].map(({ title, link }) => ({ title, link })),
+              [url]: [...items].map(({ title, link }) => ({
+                title,
+                link: isURL(link) ? link : `${new URL(url).origin}${link}`,
+              })),
             }
           }
 
