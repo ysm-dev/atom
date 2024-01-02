@@ -45,10 +45,12 @@ async function main() {
           // console.log(xmlURL)
           const xml = await fetch(xmlURL)
             .then((r) => r.text())
-            .catch(() => null)
+            .catch((e) => {
+              console.log(`Failed!!: `, url, e)
+              return null
+            })
 
           if (!xml) {
-            console.log(`Failed!!: `, url, xmlURL)
             return
           }
 
@@ -77,11 +79,13 @@ async function main() {
         toArray,
       )
     }),
-    concurrent(10),
+    concurrent(1),
     toArray,
   )
 
   // console.log(data)
+
+  console.log(`Done!`)
 }
 
 main()
