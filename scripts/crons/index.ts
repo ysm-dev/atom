@@ -10,7 +10,7 @@ import {
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { type Channels } from 'server/feeds'
-import { stringify } from 'superjson'
+import { stringify } from 'utils/json'
 import { textToBinary } from 'utils/binary'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { isURL } from 'utils/isURL'
