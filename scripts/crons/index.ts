@@ -63,7 +63,7 @@ async function main() {
 
           const bin = textToBinary(
             stringify({
-              title,
+              title: title ?? new URL(url).hostname,
               link: url,
               items: items.slice(0, 10).map(({ title, link }) => ({
                 title: title ? decodeHTMLEntities(title) : 'Untitled',
