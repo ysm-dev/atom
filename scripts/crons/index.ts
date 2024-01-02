@@ -12,6 +12,7 @@ import { parseString } from 'lib/parseString'
 import { type Channels } from 'server/feeds'
 import { stringify } from 'superjson'
 import { textToBinary } from 'utils/binary'
+import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { isURL } from 'utils/isURL'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
@@ -65,7 +66,7 @@ async function main() {
               title,
               link: url,
               items: items.slice(0, 10).map(({ title, link }) => ({
-                title,
+                title: title ? decodeHTMLEntities(title) : 'Untitled',
                 link: isURL(link) ? link : `${new URL(url).origin}${link}`,
               })),
             }),
