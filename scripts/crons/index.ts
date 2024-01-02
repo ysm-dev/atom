@@ -42,7 +42,14 @@ async function main() {
         values,
         filter(({ enabled }) => enabled),
         toAsync,
-        map(async ({ url, xmlURL }) => {
+        map(async ({ url, ...rest }) => {
+          return {
+            ...rest,
+            url,
+            cid: await toCID(url),
+          }
+        }),
+        map(async ({ url, xmlURL, cid }) => {
           // console.log(xmlURL)
           const xml = await fetch(xmlURL)
             .then((r) => r.text())
@@ -71,8 +78,6 @@ async function main() {
               })),
             }),
           )
-
-          const cid = await toCID(url)
 
           await writeFile(`./generated/${cid}.bin`, bin)
         }),

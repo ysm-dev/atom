@@ -57,16 +57,20 @@ async function main() {
         toAsync,
         filter(({ enabled }) => enabled),
         map(async ({ url, ...rest }) => {
-          const cid = await toCID(url)
+          const [cid, channel_cid] = await Promise.all([
+            toCID(url),
+            toCID(channel_id),
+          ])
 
           const [json, stateString] = await Promise.all([
             readFile(`./generated/${cid}.bin`, 'utf-8').catch(() => null),
-            readFile(`./state/${cid}.bin`, 'utf-8').catch(() => null),
+            readFile(`./state/${channel_cid}.bin`, 'utf-8').catch(() => null),
           ])
 
           return {
             url,
             cid,
+            channel_cid,
             ...rest,
             json,
             stateString,
@@ -74,106 +78,116 @@ async function main() {
         }),
         toArray,
         toAsync,
-        map(async ({ url, xmlURL, favicon, cid, json, stateString }) => {
-          let result: {
-            title: string
-            link: string
-            items: { title: string; link: string }[]
-          }
-
-          if (!json) {
-            const xml = await fetch(xmlURL).then((r) => r.text())
-
-            const { title, items } = await parseString({
-              xml,
-              url,
-              xmlURL,
-            })
-
-            result = {
-              title: title!,
-              link: url,
-              items: items.slice(0, 10).map(({ title, link }) => ({
-                title: title!,
-                link: isURL(link) ? link! : `${new URL(url).origin}${link}`,
-              })),
+        map(
+          async ({
+            url,
+            xmlURL,
+            favicon,
+            cid,
+            channel_cid,
+            json,
+            stateString,
+          }) => {
+            let result: {
+              title: string
+              link: string
+              items: { title: string; link: string }[]
             }
-          } else {
-            result = parse(binaryToText(json)) as any
-          }
 
-          let state: State
+            if (!json) {
+              const xml = await fetch(xmlURL).then((r) => r.text())
 
-          if (stateString) {
-            state = parse(binaryToText(stateString)) as any
-          } else {
-            state = {}
-          }
-
-          const { title, link, items } = result
-
-          const diff = await pipe(
-            structuredClone([...items]),
-            // filter out from first match
-            slice(
-              0,
-              state?.[channel_id]?.[url] == null ||
-                state?.[channel_id]?.[url].length === 0
-                ? items.length
-                : items.findIndex(
-                    ({ link }) => state?.[channel_id]?.[url][0].link === link,
-                  ),
-            ),
-            toAsync,
-            reverse,
-            map(async ({ link: itemLink, title: itemTitle }) => {
-              await sendDiscordMessage(webhookURL, {
-                username:
-                  title
-                    .replace('Discord', 'Dïscord')
-                    .replace('discord', 'dïscord')
-                    .slice(0, 80) ?? url,
-                avatar_url: favicon,
-                content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
+              const { title, items } = await parseString({
+                xml,
+                url,
+                xmlURL,
               })
 
-              console.log(`Sent ${itemLink} to ${name}`)
+              result = {
+                title: title!,
+                link: url,
+                items: items.slice(0, 10).map(({ title, link }) => ({
+                  title: title!,
+                  link: isURL(link) ? link! : `${new URL(url).origin}${link}`,
+                })),
+              }
+            } else {
+              result = parse(binaryToText(json))
+            }
 
-              return { title: itemTitle, link: itemLink }
-            }),
-            concurrent(1),
-            toArray,
-          )
+            let state: State
 
-          if (!state) {
-            state = {
-              [channel_id]: {
+            if (stateString) {
+              state = parse(binaryToText(stateString))
+            } else {
+              state = {}
+            }
+
+            const { title, link, items } = result
+
+            const diff = await pipe(
+              structuredClone([...items]),
+              // filter out from first match
+              slice(
+                0,
+                state?.[channel_id]?.[url] == null ||
+                  state?.[channel_id]?.[url].length === 0
+                  ? items.length
+                  : items.findIndex(
+                      ({ link }) => state?.[channel_id]?.[url][0].link === link,
+                    ),
+              ),
+              toAsync,
+              reverse,
+              map(async ({ link: itemLink, title: itemTitle }) => {
+                await sendDiscordMessage(webhookURL, {
+                  username:
+                    title
+                      .replace('Discord', 'Dïscord')
+                      .replace('discord', 'dïscord')
+                      .slice(0, 80) ?? url,
+                  avatar_url: favicon,
+                  content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
+                })
+
+                console.log(`Sent ${itemLink} to ${name}`)
+
+                return { title: itemTitle, link: itemLink }
+              }),
+              concurrent(1),
+              toArray,
+            )
+
+            if (!state) {
+              state = {
+                [channel_id]: {
+                  [url]: [...items].map(({ title, link }) => ({
+                    title,
+                    link: isURL(link) ? link : `${new URL(url).origin}${link}`,
+                  })),
+                },
+              }
+            } else {
+              state[channel_id] = {
+                ...state[channel_id],
                 [url]: [...items].map(({ title, link }) => ({
                   title,
                   link: isURL(link) ? link : `${new URL(url).origin}${link}`,
                 })),
-              },
+              }
             }
-          } else {
-            state[channel_id] = {
-              ...state[channel_id],
-              [url]: [...items].map(({ title, link }) => ({
-                title,
-                link: isURL(link) ? link : `${new URL(url).origin}${link}`,
-              })),
+
+            // write state to local file
+            if (diff.length > 0) {
+              console.log(`Writing state for ${url}`)
+
+              await writeFile(
+                `./state/${channel_cid}.bin`,
+                textToBinary(stringify(state)),
+              )
             }
-          }
-
-          // write state to local file
-          if (diff.length > 0) {
-            console.log(`Writing state for ${url}`)
-
-            await writeFile(
-              `./state/${cid}.bin`,
-              textToBinary(stringify(state)),
-            )
-          }
-        }),
+          },
+        ),
         concurrent(5),
         toArray,
       )
