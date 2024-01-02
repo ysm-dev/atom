@@ -1,9 +1,9 @@
 name: Job
 
 on:
-  repository_dispatch:
-    types:
-      - update
+  # repository_dispatch:
+  #   types:
+  #     - update
   workflow_dispatch:
 
 jobs:

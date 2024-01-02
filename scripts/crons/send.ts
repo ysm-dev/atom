@@ -115,12 +115,10 @@ async function main() {
               result = parse(binaryToText(json))
             }
 
-            let state: State
+            let state: State | null = null
 
             if (stateString) {
-              state = parse(binaryToText(stateString))
-            } else {
-              state = {}
+              state = parse(binaryToText(stateString)) as State
             }
 
             const { title, link, items } = result
@@ -130,12 +128,15 @@ async function main() {
               // filter out from first match
               slice(
                 0,
-                state?.[channel_id]?.[url] == null ||
-                  state?.[channel_id]?.[url].length === 0
-                  ? items.length
-                  : items.findIndex(
-                      ({ link }) => state?.[channel_id]?.[url][0].link === link,
-                    ),
+                state !== null
+                  ? state?.[channel_id]?.[url] == null ||
+                    state?.[channel_id]?.[url].length === 0
+                    ? items.length
+                    : items.findIndex(
+                        ({ link }) =>
+                          state?.[channel_id]?.[url][0].link === link,
+                      )
+                  : 0,
               ),
               toAsync,
               reverse,
