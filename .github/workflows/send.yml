@@ -1,10 +1,10 @@
 name: Send
 
 on:
-  workflow_run:
-    workflows: [Job]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: [Job]
+  #   types:
+  #     - completed
   workflow_dispatch:
 
 jobs:
