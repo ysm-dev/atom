@@ -49,7 +49,9 @@ export const getFeed = async (url: string) => {
     url,
     xmlURL: result.feedId.replace('feed/', ''),
     htmlURL: result.website,
-    title: decodeHTMLEntities(result.title),
+    title: result.title
+      ? decodeHTMLEntities(result.title)
+      : new URL(url).hostname,
     description: result.description,
     favicon: await getFaviconURI(url!),
   }
