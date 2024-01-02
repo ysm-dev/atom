@@ -102,10 +102,6 @@ async function main() {
             result = parse(binaryToText(json)) as any
           }
 
-          if (url.startsWith(`https://muan.co/`)) {
-            console.log(result)
-          }
-
           let state: State
 
           if (stateString) {
@@ -178,13 +174,15 @@ async function main() {
             )
           }
         }),
-        concurrent(100),
+        concurrent(5),
         toArray,
       )
     }),
-    concurrent(100),
+    concurrent(1),
     toArray,
   )
+
+  console.log(`Done!`)
 }
 
 main()
