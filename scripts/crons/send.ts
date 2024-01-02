@@ -116,9 +116,11 @@ async function main() {
             }
 
             let state: State | null = null
+            let isInit = true
 
             if (stateString) {
               state = parse(binaryToText(stateString)) as State
+              isInit = false
             }
 
             const { title, link, items } = result
@@ -179,7 +181,7 @@ async function main() {
             }
 
             // write state to local file
-            if (diff.length > 0) {
+            if (diff.length > 0 || isInit) {
               console.log(`Writing state for ${url}`)
 
               await writeFile(

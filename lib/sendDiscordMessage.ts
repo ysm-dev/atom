@@ -15,7 +15,7 @@ export const sendDiscordMessage = (
   })
     .then<Response>(async (r) => {
       if (r.status === 429) {
-        console.error('Failed to send Discord message', message)
+        console.error('Failed to send Discord message', await r.json())
         await wait(500)
         return sendDiscordMessage(webhookURL, message)
       }
