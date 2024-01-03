@@ -35,4 +35,4 @@ jobs:
 
       - run: bunx tsx scripts/crons/run_job.ts
         env:
-          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+          GITHUB_PAT: ${{ secrets.PAT }}
