@@ -5,8 +5,8 @@ main = "./server/index.ts"
 
 workers_dev = true
 
-[triggers]
-crons = ["* * * * *"]
+# [triggers]
+# crons = ["* * * * *"]
 
 [build]
 watch_dir = "server"

@@ -32,3 +32,7 @@ jobs:
           author_email: bot@users.noreply.github.com
           message: Update State
           pull: '--rebase --autostash'
+
+      - run: bunx tsx scripts/crons/run_job.ts
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}

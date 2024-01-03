@@ -87,7 +87,7 @@ async function main() {
         toArray,
       )
     }),
-    concurrent(1),
+    concurrent(10),
     toArray,
   )
 
