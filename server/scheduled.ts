@@ -9,7 +9,7 @@ export const scheduled: ExportedHandlerScheduledHandler = async (
     (async () => {
       // await run(GITHUB_PAT)
       // await wait(ms('30s'))
-      await run(GITHUB_PAT)
+      // await run(GITHUB_PAT)
     })(),
   )
 }
