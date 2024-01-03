@@ -10,10 +10,10 @@ import {
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { type Channels } from 'server/feeds'
-import { stringify } from 'utils/json'
 import { textToBinary } from 'utils/binary'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { isURL } from 'utils/isURL'
+import { stringify } from 'utils/json'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
@@ -50,7 +50,7 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          // console.log(xmlURL)
+          console.log(url, xmlURL)
           const xml = await fetch(xmlURL)
             .then((r) => r.text())
             .catch((e) => {
@@ -79,7 +79,9 @@ async function main() {
             }),
           )
 
-          await writeFile(`./generated/${cid}.bin`, bin)
+          console.log(`Writing ${url}`)
+
+          await writeFile(`./generated/${cid}.bin`, bin, 'binary')
         }),
         concurrent(20),
         toArray,
