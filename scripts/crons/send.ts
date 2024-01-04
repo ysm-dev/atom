@@ -13,6 +13,7 @@ import { readFile, writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { type Channels } from 'server/feeds'
+import { archive } from 'utils/archive'
 import { binaryToText, textToBinary } from 'utils/binary'
 import { isURL } from 'utils/isURL'
 import { parse, stringify } from 'utils/json'
@@ -129,17 +130,32 @@ async function main() {
               toAsync,
               reverse,
               map(async ({ link: itemLink, title: itemTitle }) => {
-                await sendDiscordMessage(webhookURL, {
-                  username:
-                    title
-                      .replace('Discord', 'Dïscord')
-                      .replace('discord', 'dïscord')
-                      .slice(0, 80) ?? url,
-                  avatar_url: favicon,
-                  content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
-                })
+                const cid = await toCID(`${channel_id}:${itemLink}}`)
 
-                console.log(`Sent ${itemLink} to ${name}`)
+                const result = await readFile(
+                  `./state/${cid}.bin`,
+                  'binary',
+                ).catch(() => null)
+
+                if (result == null) {
+                  const { id } = await sendDiscordMessage(webhookURL, {
+                    username:
+                      title
+                        .replace('Discord', 'Dïscord')
+                        .replace('discord', 'dïscord')
+                        .slice(0, 80) ?? url,
+                    avatar_url: favicon,
+                    content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
+                  })
+
+                  archive(itemLink)
+
+                  if (id) {
+                    await writeFile(`./state/${cid}.bin`, 'true')
+                  }
+
+                  console.log(`Sent ${itemLink} to ${name}`)
+                }
 
                 return { title: itemTitle, link: itemLink }
               }),
@@ -164,10 +180,6 @@ async function main() {
               })),
             }
           }
-
-          // write state to local file
-          // if (diff.length > 0 || isInit) {
-          // }
         }),
         concurrent(1),
         toArray,
@@ -177,6 +189,7 @@ async function main() {
         await writeFile(
           `./state/${channel_cid}.bin`,
           textToBinary(stringify(state)),
+          'binary',
         )
       }
     }),

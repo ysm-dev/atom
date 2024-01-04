@@ -1,0 +1,20 @@
+const sig = `1713209970%201681673970%20JLgubvW%2BkQusIJEVdDVkvJ42iZZV5nJM159siAy1ypL%2FzDdOWN%2Bvv9Y4hVPpPvDsdumWIlPNU1NnDQXBtf605u32dXudekyHIDwrN5QM%2Fh06bcIC3ay97bMRdqTP34sxah5YQY82lP3i5BAtNmCCVCi1BJt0IkuHigGosroWLvA%3D`
+
+export const archive = async (url: string) => {
+  return fetch('https://chrome-api.archive.org/save', {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/x-www-form-urlencoded',
+      Cookie: `logged-in-sig=${sig}; logged-in-user=${Math.random()
+        .toString()
+        .slice(2, 7)}@gmail.com;`,
+    },
+    body: new URLSearchParams({ url }),
+  })
+    .then((r) => r.text())
+    .catch((e) => {
+      console.error('Error archiving: ', url)
+      console.error(e)
+    })
+}
