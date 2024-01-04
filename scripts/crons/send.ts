@@ -148,10 +148,11 @@ async function main() {
                     content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
                   })
 
-                  archive(itemLink)
-
                   if (id) {
-                    await writeFile(`./state/${cid}.bin`, 'true')
+                    await Promise.all([
+                      archive(itemLink),
+                      writeFile(`./state/${cid}.bin`, 'true'),
+                    ])
                   }
 
                   console.log(`Sent ${itemLink} to ${name}`)
