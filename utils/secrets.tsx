@@ -5,7 +5,7 @@ import { isServer } from 'utils/isServer'
 // Front
 export const SECRET = `zH4NRP1HMALxxCFnRZABFA7GOJtzU_gIj02alfL1lva`
 
-export const FEEDLY_TOKEN = `A9re6tTahlzJAcR859DalS4auLXbRKRqXSyAIHJJ9xpYrXtjtj5bvPBOnsfRpLqD8H5dj7WpxSgG5n6N-q0A5izS4V9spsePDCuoQzsVO2kVpnZGXkaw4N9fPiPwopmOvhDRvxZ6QMDfrGAGV52w3nkfdWWgk_2xAhF_qhWvyAHaxuS4u6nt7jUSG9qN1bd5VnriSfo1FZantcuDBQfsTRCqqXZXq6703QIsbWi2d8Y1jQ:feedly`
+export const FEEDLY_TOKEN = `AxmESvLE00hlTZCKpv73ez3zvWLdw6BFt0MamXmhvG2MWLg0XCR8Jxpi5shLRhVxWkAv4PAyLpyGH1Kl0KSJyFHZRG_UoxgFCof1U29IaunvBUflEluds8YFiubEqODCRfzwluYd8tMcZaA_tFHjXqxBywQ-t9xlV1rzHkwFQ0fB2ICYbyIt0k3EtmLBcbpvTU6P2JJ3fVv5cXDqwj-rv_ExM6H1b1b60tXnwm67AxYTlg:feedly`
 
 export const GUILD_ID = `943160510814232576`
 

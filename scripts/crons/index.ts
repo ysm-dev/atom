@@ -50,7 +50,7 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          console.log(url, xmlURL)
+          // console.log(url, xmlURL)
           const xml = await fetch(xmlURL)
             .then((r) => r.text())
             .catch((e) => {
@@ -79,7 +79,7 @@ async function main() {
             }),
           )
 
-          console.log(`Writing ${url}`)
+          // console.log(`Writing ${url}`)
 
           await writeFile(`./generated/${cid}.bin`, bin, 'binary')
         }),
