@@ -1,12 +1,4 @@
-import { env } from 'utils/secrets'
-
-async function main() {
-  const PAT = env().GITHUB_PAT
-
-  await run(PAT)
-}
-
-const run = async (PAT: string) => {
+export const run = async (PAT: string) => {
   await Promise.all([
     fetch(`https://api.github.com/repos/ysm-dev/atom/dispatches`, {
       method: 'POST',
@@ -22,5 +14,3 @@ const run = async (PAT: string) => {
     }),
   ])
 }
-
-main()
