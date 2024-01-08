@@ -51,6 +51,13 @@ export const getFaviconURI = (url: string): string => {
     return `https://img.ysm.dev/naver/${handle}`
   }
 
+  if (host.includes(`disquiet.io`)) {
+    let [, handle] = pathname.split('/')
+    handle = handle.replace('@', '')
+
+    return `https://img.ysm.dev/disquiet/${handle}`
+  }
+
   if (host === 'rss.ysm.dev') {
     if (pathname.split('/')[2]?.includes('.')) {
       return `https://app.ray.st/api/favicon/${pathname.split('/')[2]}`
@@ -66,6 +73,10 @@ export const getFaviconURI = (url: string): string => {
     if (pathname.startsWith('/api/brunch/')) {
       const handle = pathname.split('/').pop()
       return `https://img.ysm.dev/brunch/${handle}`
+    }
+    if (pathname.startsWith('/api/disquiet/')) {
+      const handle = pathname.split('/').pop()
+      return `https://img.ysm.dev/disquiet/${handle}`
     }
   }
 
