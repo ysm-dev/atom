@@ -7,6 +7,7 @@ import { channels } from 'server/discord/guilds/[guild_id]/channels'
 import { webhooks } from 'server/discord/guilds/[guild_id]/webhooks'
 import { feeds } from 'server/feeds'
 import { health } from 'server/health'
+import { proxy } from 'server/proxy'
 import { scheduled } from 'server/scheduled'
 import { ENVIRONMENT, type ENV } from 'utils/env'
 import { isLocal } from 'utils/isLocal'
@@ -51,6 +52,7 @@ const route = app
   .route('/', channels)
   .route('/', webhooks)
   .route('/', feeds)
+  .route('/', proxy)
 
 showRoutes(route)
 

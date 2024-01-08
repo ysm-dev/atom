@@ -5,8 +5,8 @@ const parser = new Parser()
 
 type Params = {
   xml: string
-  url: string
-  xmlURL: string
+  url?: string
+  xmlURL?: string
 }
 
 export const parseString = async ({ xml, url, xmlURL }: Params) => {

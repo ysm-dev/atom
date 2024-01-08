@@ -129,7 +129,6 @@ export default function Page() {
             const unsubscribe = new QueryObserver(client, {
               queryKey: ['feed', feed.url],
             }).subscribe(({ data, status }) => {
-              console.log({ status, data })
               if (status === 'success') {
                 resolve(data as Awaited<ReturnType<typeof getFeed>>)
                 unsubscribe()
@@ -158,7 +157,23 @@ export default function Page() {
       indexBy((feed) => feed.id),
     )
 
+    if (Object.keys(result).length === 0) {
+      return
+    }
+
+    if (Object.keys(result).length === 1) {
+      const yes = confirm(`Are you sure you want to add this feed?`)
+
+      if (yes) {
+        setFeeds(result)
+      }
+
+      return
+    }
+
     setFeeds(result)
+
+    console.log('Saved!')
   })
 
   const formRef = useRef<HTMLFormElement>(null)
