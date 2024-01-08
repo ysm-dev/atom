@@ -53,20 +53,25 @@ async function main() {
           // console.log(url, xmlURL)
           const xml = await fetch(xmlURL)
             .then((r) => r.text())
-            .catch((e) => {
-              console.log(`Failed!!: `, url, e)
-              return null
-            })
+            .catch(() => null)
 
           if (!xml) {
+            console.log(`Failed!!: `, url)
             return
           }
 
-          const { title, items } = await parseString({
+          const rss = await parseString({
             xml,
             url,
             xmlURL,
           })
+
+          if (!rss) {
+            console.log(`Failed!!: `, url)
+            return
+          }
+
+          const { title, items } = rss
 
           const bin = textToBinary(
             stringify({

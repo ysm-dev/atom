@@ -96,11 +96,18 @@ async function main() {
           if (!json) {
             const xml = await fetch(xmlURL).then((r) => r.text())
 
-            const { title, items } = await parseString({
+            const rss = await parseString({
               xml,
               url,
               xmlURL,
             })
+
+            if (!rss) {
+              console.log(`Failed!!: `, url)
+              return
+            }
+
+            const { title, items } = rss
 
             result = {
               title: title!,

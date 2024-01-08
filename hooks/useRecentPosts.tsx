@@ -24,7 +24,13 @@ export const getRecentPosts = async (xmlURL: string) => {
     })}`,
   ).then((r) => r.text())
 
-  const { title, items } = await parseString({ xml, xmlURL })
+  const rss = await parseString({ xml, xmlURL })
+
+  if (!rss) {
+    return null
+  }
+
+  const { title, items } = rss
 
   return items.map((e) => ({
     link: e.link,
