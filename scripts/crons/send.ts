@@ -112,7 +112,7 @@ async function main() {
             result = {
               title: title!,
               link: url,
-              items: items.slice(0, 10).map(({ title, link }) => ({
+              items: items.slice(0, 30).map(({ title, link }) => ({
                 title: title!,
                 link: isURL(link) ? link! : `${new URL(url).origin}${link}`,
               })),

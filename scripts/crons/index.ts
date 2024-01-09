@@ -77,7 +77,7 @@ async function main() {
             stringify({
               title: title ?? new URL(url).hostname,
               link: url,
-              items: items.slice(0, 10).map(({ title, link }) => ({
+              items: items.slice(0, 30).map(({ title, link }) => ({
                 title: title ? decodeHTMLEntities(title) : 'Untitled',
                 link: isURL(link) ? link : `${new URL(url).origin}${link}`,
               })),
