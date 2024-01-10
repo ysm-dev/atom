@@ -3,24 +3,34 @@
 import { useQuery } from '@tanstack/react-query'
 import { parseString } from 'lib/parseString'
 import ms from 'ms'
+import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getServerURL } from 'utils/getServerURL'
 import { isURL } from 'utils/isURL'
 
-export function useRecentPosts(xmlURL?: string) {
+type Params = {
+  url?: string
+  xmlURL?: string
+}
+
+export function useRecentPosts(params: Params) {
+  const { url, xmlURL } = params
+
   const { data, ...rest } = useQuery({
     queryKey: ['recents', xmlURL],
-    queryFn: () => getRecentPosts(xmlURL!),
-    enabled: !!xmlURL && isURL(xmlURL),
+    queryFn: () => getRecentPosts(params),
+    enabled: !!url && !!xmlURL && isURL(xmlURL),
     staleTime: ms('1h'),
   })
 
   return { data, ...rest }
 }
 
-export const getRecentPosts = async (xmlURL: string) => {
+export const getRecentPosts = async (params: Params) => {
+  const { url, xmlURL } = params
+
   const xml = await fetch(
     `${getServerURL()}/proxy?${new URLSearchParams({
-      url: xmlURL,
+      url: xmlURL!,
     })}`,
   ).then((r) => r.text())
 
@@ -32,9 +42,9 @@ export const getRecentPosts = async (xmlURL: string) => {
 
   const { title, items } = rss
 
-  return items.map((e) => ({
-    link: e.link,
-    title: e.title,
+  return items.map(({ link, title }) => ({
+    title: title ? decodeHTMLEntities(title) : 'Untitled',
+    link: isURL(link) ? link : `${new URL(url!).origin}${link}`,
   }))
 }
 

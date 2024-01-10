@@ -48,7 +48,7 @@ export const getFeed = async (url: string) => {
   return {
     url,
     xmlURL: result.feedId.replace('feed/', ''),
-    htmlURL: result.website,
+    htmlURL: result.website ?? url,
     title: result.title
       ? decodeHTMLEntities(result.title)
       : new URL(url).hostname,

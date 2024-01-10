@@ -173,7 +173,7 @@ export default function Page() {
 
     setFeeds(result)
 
-    console.log('Saved!')
+    console.log(`Saved!`, Object.keys(result).length)
   })
 
   const formRef = useRef<HTMLFormElement>(null)
@@ -269,7 +269,10 @@ const InputItem = memo(
       channel: { webhookURL, name },
     } = useChannel()
 
-    const { data: posts, refetch } = useRecentPosts(data?.xmlURL)
+    const { data: posts, refetch } = useRecentPosts({
+      url,
+      xmlURL: data?.xmlURL,
+    })
 
     const { mutateAsync: send, isPending: isSending } = useMutation({
       mutationFn: async () => {

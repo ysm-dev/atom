@@ -78,7 +78,10 @@ async function main() {
               title: title ?? new URL(url).hostname,
               link: url,
               items: items.slice(0, 30).map(({ title, link }) => ({
-                title: title ? decodeHTMLEntities(title) : 'Untitled',
+                title:
+                  title && typeof title === 'string'
+                    ? decodeHTMLEntities(title)
+                    : 'Untitled',
                 link: isURL(link) ? link : `${new URL(url).origin}${link}`,
               })),
             }),
