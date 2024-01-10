@@ -26,6 +26,25 @@ async function main() {
     throw new Error(`No data found for guild ${GUILD_ID}`)
   }
 
+  pipe(
+    data,
+    values,
+    map((ch) => {
+      console.log(ch.name, Object.values(ch.feeds).length)
+      pipe(
+        ch.feeds,
+        values,
+        map((feed) => {
+          console.log(`  ${feed.url}`)
+          return feed
+        }),
+        toArray,
+      )
+      return ch
+    }),
+    toArray,
+  )
+
   // remove all files in generated
   await $`rm -rf ./generated/*`
 
