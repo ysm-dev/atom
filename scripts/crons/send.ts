@@ -10,7 +10,6 @@ import {
   values,
 } from '@fxts/core'
 import { readFile, writeFile } from 'fs/promises'
-import { parseString } from 'lib/parseString'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { run } from 'scripts/crons/run_job'
 import { type Channels } from 'server/feeds'
@@ -95,32 +94,11 @@ async function main() {
           }
 
           if (!json) {
-            const xml = await fetch(xmlURL!).then((r) => r.text())
-
-            const rss = await parseString({
-              xml,
-              url,
-              xmlURL,
-            })
-
-            if (!rss) {
-              console.log(`Failed!!: `, url)
-              return
-            }
-
-            const { title, items } = rss
-
-            result = {
-              title: title!,
-              link: url,
-              items: items.slice(0, 30).map(({ title, link }) => ({
-                title: title!,
-                link: isURL(link) ? link! : `${new URL(url).origin}${link}`,
-              })),
-            }
-          } else {
-            result = parse(binaryToText(json))
+            console.log(`Failed!!: `, url)
+            return
           }
+
+          result = parse(binaryToText(json))
 
           const { title, link, items } = result
 

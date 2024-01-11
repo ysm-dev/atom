@@ -73,10 +73,12 @@ async function main() {
           // console.log(url, xmlURL)
           const xml = await fetch(xmlURL!)
             .then((r) => r.text())
-            .catch(() => null)
+            .catch((e) => {
+              return null
+            })
 
           if (!xml) {
-            console.log(`Failed!!: `, url)
+            console.log(`Failed!!: `, xmlURL)
             return
           }
 
@@ -87,7 +89,7 @@ async function main() {
           })
 
           if (!rss) {
-            console.log(`Failed!!: `, url)
+            console.log(`Failed!!: `, xmlURL)
             return
           }
 

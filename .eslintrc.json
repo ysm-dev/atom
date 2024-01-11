@@ -13,6 +13,7 @@
     "@next/next/no-img-element": "warn",
     "@next/next/no-sync-scripts": "warn",
     "no-unused-vars": "off",
+    "prefer-const": "off",
     "no-extra-boolean-cast": "off",
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/no-var-requires": "warn",

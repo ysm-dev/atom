@@ -34,7 +34,7 @@ export const getRecentPosts = async (params: Params) => {
     })}`,
   ).then((r) => r.text())
 
-  const rss = await parseString({ xml, xmlURL })
+  const rss = await parseString({ xml, url: xmlURL!, xmlURL })
 
   if (!rss) {
     return null
