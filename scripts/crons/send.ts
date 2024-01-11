@@ -70,6 +70,7 @@ async function main() {
         values,
         toAsync,
         filter(({ enabled }) => enabled),
+        filter(({ xmlURL }) => xmlURL),
         map(async ({ url, ...rest }) => {
           const [cid] = await Promise.all([toCID(url)])
 
@@ -94,7 +95,7 @@ async function main() {
           }
 
           if (!json) {
-            const xml = await fetch(xmlURL).then((r) => r.text())
+            const xml = await fetch(xmlURL!).then((r) => r.text())
 
             const rss = await parseString({
               xml,

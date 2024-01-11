@@ -147,11 +147,11 @@ export default function Page() {
           favicon: result?.favicon,
         }
       }),
-      filter((feed) => feed.xmlURL),
+      // filter((feed) => feed.xmlURL),
       map((feed) => ({
         ...feed,
-        xmlURL: feed.xmlURL!,
-        htmlURL: feed.htmlURL!,
+        xmlURL: feed.xmlURL,
+        htmlURL: feed.htmlURL,
       })),
       concurrent(10),
       indexBy((feed) => feed.id),
@@ -261,7 +261,7 @@ const InputItem = memo(
     const url = item.url
     const enabled = item.enabled
 
-    const { data, isPending } = useFeed(url)
+    const { data, isPending } = useFeed({ url, enabled })
 
     const isSuccess = !isURL(url) || isPending ? undefined : !!data?.xmlURL
 
@@ -287,7 +287,7 @@ const InputItem = memo(
         await sendDiscordMessage(webhookURL, {
           username:
             title
-              .replace('Discord', 'Dïscord')
+              ?.replace('Discord', 'Dïscord')
               .replace('discord', 'dïscord')
               .slice(0, 80) ?? url,
           avatar_url: favicon,
@@ -399,7 +399,7 @@ const InputItem = memo(
               }
             }}
           />
-          {!isURL(url) ? (
+          {!isURL(url) || !enabled ? (
             <></>
           ) : isPending ? (
             <div className="absolute right-0 top-0 flex aspect-square h-6 w-6 items-center justify-center">

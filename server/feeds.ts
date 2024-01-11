@@ -10,8 +10,8 @@ import { z } from 'zod'
 const Feed = z.object({
   id: z.string(),
   url: z.string(),
-  xmlURL: z.string(),
-  htmlURL: z.string(),
+  xmlURL: z.string().optional(),
+  htmlURL: z.string().optional(),
   favicon: z.string().optional(),
   enabled: z.boolean(),
 })

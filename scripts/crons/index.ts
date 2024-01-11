@@ -60,6 +60,7 @@ async function main() {
         feeds,
         values,
         filter(({ enabled }) => enabled),
+        filter(({ xmlURL }) => xmlURL),
         toAsync,
         map(async ({ url, ...rest }) => {
           return {
@@ -70,7 +71,7 @@ async function main() {
         }),
         map(async ({ url, xmlURL, cid }) => {
           // console.log(url, xmlURL)
-          const xml = await fetch(xmlURL)
+          const xml = await fetch(xmlURL!)
             .then((r) => r.text())
             .catch(() => null)
 

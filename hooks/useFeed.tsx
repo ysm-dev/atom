@@ -7,11 +7,16 @@ import { getFaviconURI } from 'utils/getFaviconURI'
 import { isURL } from 'utils/isURL'
 import { FEEDLY_TOKEN } from 'utils/secrets'
 
-export function useFeed(url?: string) {
+type Params = {
+  url?: string
+  enabled?: boolean
+}
+
+export function useFeed({ url, enabled }: Params) {
   const { data, ...rest } = useQuery({
     queryKey: ['feed', url],
     queryFn: () => getFeed(url!),
-    enabled: isURL(url),
+    enabled: isURL(url) && enabled,
     staleTime: ms('1h'),
   })
 
@@ -42,7 +47,9 @@ export const getFeed = async (url: string) => {
   const result = data.results?.[0]
 
   if (!result) {
-    return
+    return {
+      url,
+    }
   }
 
   return {
