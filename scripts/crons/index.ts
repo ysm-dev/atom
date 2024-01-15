@@ -85,7 +85,7 @@ async function main() {
           const rss = await parseString({
             xml,
             url,
-            xmlURL,
+            xmlURL: xmlURL ?? url,
           })
 
           if (!rss) {
