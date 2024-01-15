@@ -13,6 +13,8 @@ export const parseString = async ({ xml, url, xmlURL }: Params) => {
   return parser.parseString
     .bind(parser)(xml)
     .catch(async (e) => {
+      console.log(`Failed to parse ${xmlURL} with rss-parser`)
+
       const result = await rssConverter.toJson(xmlURL)
       const title = result.title as string
 
