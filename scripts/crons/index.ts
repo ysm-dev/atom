@@ -73,7 +73,7 @@ async function main() {
           // console.log(url, xmlURL)
           const xml = await fetch(xmlURL!, {
             headers: {
-              accept: `text/html,application/xhtml+xml,application/xml`,
+              accept: `application/atom+xml;application/rss+xml`,
             },
           })
             .then((r) => r.text())
