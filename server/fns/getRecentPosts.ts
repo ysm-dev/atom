@@ -1,13 +1,40 @@
+import { parseString } from 'lib/parseString'
+import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getServerURL } from 'utils/getServerURL'
+import { isServer } from 'utils/isServer'
+import { isURL } from 'utils/isURL'
 
-export const getRecentPosts = async (xmlURL: string) => {
-  const data = await fetch(
-    `${getServerURL()}/recents?xmlURL=${xmlURL}`,
-  ).then<R>((r) => r.json())
+type Params = {
+  url: string
+  xmlURL: string
+  limit?: number
+}
 
-  return data.result.map(({ title, links }) => ({
-    title: title.value,
-    link: links[0].href,
+export const getRecentPosts = async (params: Params) => {
+  const { url, xmlURL, limit = 30 } = params
+
+  const xml = await (isServer()
+    ? fetch(xmlURL!, {
+        headers: {
+          Accept: `application/atom+xml;application/rss+xml`,
+          'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36`,
+        },
+      }).then((r) => r.text())
+    : fetch(
+        `${getServerURL()}/proxy?${new URLSearchParams({ url: xmlURL! })}`,
+      ).then((r) => r.text()))
+
+  const rss = await parseString({ xml, url: xmlURL!, xmlURL: xmlURL! })
+
+  if (!rss) {
+    return null
+  }
+
+  const { title, items } = rss
+
+  return items.slice(0, limit).map(({ link, title }) => ({
+    title: title ? decodeHTMLEntities(title) : 'Untitled',
+    link: isURL(link) ? link : `${new URL(url!).origin}${link}`,
   }))
 }
 

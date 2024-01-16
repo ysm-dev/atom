@@ -9,7 +9,7 @@ import { feed } from 'server/feedly/feed'
 import { feeds } from 'server/feeds'
 import { health } from 'server/health'
 import { proxy } from 'server/proxy'
-import { recents } from 'server/recents'
+import { rss2json } from 'server/rss2json'
 import { scheduled } from 'server/scheduled'
 import { ENVIRONMENT, type ENV } from 'utils/env'
 import { isLocal } from 'utils/isLocal'
@@ -56,7 +56,7 @@ const route = app
   .route('/', feeds)
   .route('/', proxy)
   .route('/', feed)
-  .route('/', recents)
+  .route('/', rss2json)
 
 showRoutes(route)
 
