@@ -25,7 +25,7 @@ export const parseString = async ({ xml, url, xmlURL }: Params) => {
       return {
         title,
         items: json.result.map(({ title, links }) => ({
-          title,
+          title: title.value,
           link: links[0].href,
         })),
       }
