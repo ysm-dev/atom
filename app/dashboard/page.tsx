@@ -17,7 +17,7 @@ export default function Page() {
   const channels = useChannels()!
 
   return (
-    <section className="flex flex-col gap-1">
+    <section className="mx-auto flex max-w-screen-sm flex-col gap-1">
       <div className="flex flex-col px-2">
         {Object.values(channels)
           .filter((channel) => !channel.parent_id)
