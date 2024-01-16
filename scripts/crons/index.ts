@@ -71,7 +71,11 @@ async function main() {
         }),
         map(async ({ url, xmlURL, cid }) => {
           // console.log(url, xmlURL)
-          const xml = await fetch(xmlURL!)
+          const xml = await fetch(xmlURL!, {
+            headers: {
+              accept: `text/html,application/xhtml+xml,application/xml`,
+            },
+          })
             .then((r) => r.text())
             .catch((e) => {
               return null
