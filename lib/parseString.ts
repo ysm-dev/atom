@@ -1,5 +1,6 @@
-import { getFeed } from 'hooks/useFeed'
 import Parser from 'rss-parser'
+import { getFeedlyFeed } from 'server/fns/getFeedlyFeed'
+import { getRecentPosts } from 'server/fns/getRecentPosts'
 
 const parser = new Parser({})
 
@@ -17,17 +18,14 @@ export const parseString = async ({ xml, url, xmlURL }: Params) => {
       console.log(xmlURL, xml.slice(0, 100))
       console.log(e)
 
-      const [json, { title }] = await Promise.all([
-        fetch(`https://rss2json.deno.dev/${xmlURL}`).then<R>((r) => r.json()),
-        getFeed(url),
+      const [items, { title }] = await Promise.all([
+        getRecentPosts(xmlURL),
+        getFeedlyFeed(url),
       ])
 
       return {
         title,
-        items: json.result.map(({ title, links }) => ({
-          title: title.value,
-          link: links[0].href,
-        })),
+        items,
       }
     })
 }

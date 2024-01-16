@@ -5,9 +5,11 @@ import { logger } from 'hono/logger'
 import { type ValueOf } from 'next/dist/shared/lib/constants'
 import { channels } from 'server/discord/guilds/[guild_id]/channels'
 import { webhooks } from 'server/discord/guilds/[guild_id]/webhooks'
+import { feed } from 'server/feedly/feed'
 import { feeds } from 'server/feeds'
 import { health } from 'server/health'
 import { proxy } from 'server/proxy'
+import { recents } from 'server/recents'
 import { scheduled } from 'server/scheduled'
 import { ENVIRONMENT, type ENV } from 'utils/env'
 import { isLocal } from 'utils/isLocal'
@@ -53,6 +55,8 @@ const route = app
   .route('/', webhooks)
   .route('/', feeds)
   .route('/', proxy)
+  .route('/', feed)
+  .route('/', recents)
 
 showRoutes(route)
 

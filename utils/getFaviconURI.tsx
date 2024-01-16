@@ -19,7 +19,7 @@ export const getFaviconURI = (url: string): string => {
   }
 
   if (host.includes('velog.io')) {
-    let [, handle] = pathname.split('/')
+    let [, , handle] = pathname.split('/')
     handle = handle.replace('@', '')
 
     return `https://img.ysm.dev/velog/${handle}`

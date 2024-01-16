@@ -6,6 +6,7 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query'
+import { Image } from 'components/Image'
 import { Button } from 'components/ui/button'
 import { Input } from 'components/ui/input'
 import { Switch } from 'components/ui/switch'
@@ -16,7 +17,6 @@ import { useRecentPosts } from 'hooks/useRecentPosts'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { cn } from 'lib/utils'
 import { GripVertical, Loader, SendHorizonal } from 'lucide-react'
-import Image from 'next/image'
 import {
   memo,
   useCallback,
@@ -408,9 +408,6 @@ const InputItem = memo(
           ) : data?.favicon ? (
             <div className="absolute right-0.5 top-0.5 aspect-square h-5 w-5 rounded-sm bg-black">
               <Image
-                unoptimized
-                priority
-                key={data.favicon}
                 src={data.favicon}
                 className="rounded-full p-px"
                 width={100}
