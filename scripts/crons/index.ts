@@ -78,11 +78,11 @@ async function main() {
           })
             .then((r) => r.text())
             .catch((e) => {
+              console.log(`Failed!!: `, xmlURL, e)
               return null
             })
 
           if (!xml) {
-            console.log(`Failed!!: `, xmlURL)
             return
           }
 
