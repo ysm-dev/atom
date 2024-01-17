@@ -9,6 +9,7 @@ import {
 } from '@fxts/core'
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
+import ms from 'ms'
 import { type Channels } from 'server/feeds'
 import { textToBinary } from 'utils/binary'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
@@ -75,6 +76,7 @@ async function main() {
             headers: {
               accept: `application/atom+xml;application/rss+xml`,
             },
+            signal: AbortSignal.timeout(ms(`5s`)),
           })
             .then((r) => r.text())
             .catch((e) => {
