@@ -1,3 +1,4 @@
+import ms from 'ms'
 import { getServerURL } from 'utils/getServerURL'
 import { isServer } from 'utils/isServer'
 
@@ -13,6 +14,9 @@ export const getRSS2JSON = async (params: Params) => {
     isServer()
       ? `https://rss2json.deno.dev/${xmlURL}`
       : `${getServerURL()}/rss2json?xmlURL=${xmlURL}`,
+    {
+      signal: AbortSignal.timeout(ms(`5s`)),
+    },
   ).then<R>((r) => r.json())
 
   return json.result.map(({ title, links }) => ({
