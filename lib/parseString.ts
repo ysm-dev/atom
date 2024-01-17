@@ -1,5 +1,6 @@
 import Parser from 'rss-parser'
 import { getFeedlyFeed } from 'server/fns/getFeedlyFeed'
+import { getFeedlyRecents } from 'server/fns/getFeedlyRecents'
 import { getRSS2JSON } from 'server/fns/getRSS2JSON'
 import { getServerURL } from 'utils/getServerURL'
 import { isServer } from 'utils/isServer'
@@ -33,5 +34,8 @@ export const parseString = async ({ xml, url, xmlURL }: Params) => {
         title,
         items,
       }
+    })
+    .catch(async () => {
+      return getFeedlyRecents({ url, xmlURL })
     })
 }
