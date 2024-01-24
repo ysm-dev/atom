@@ -12,13 +12,14 @@ export const getFeedlyFeed = async (url: string) => {
       fullTerm: 'false',
       locale: 'en',
       ct: 'feedly.desktop',
-      cv: `31.0.2046`,
+      // cv: `31.0.2046`,
       ck: `${Date.now()}`,
     })}`,
     {
       headers: {
         authorization: `Bearer ${FEEDLY_TOKEN}`,
         'content-type': 'application/json',
+        'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36`,
       },
     },
   ).then<R>((r) => r.json())

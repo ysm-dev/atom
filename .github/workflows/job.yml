@@ -30,4 +30,4 @@ jobs:
           author_name: Bot
           author_email: bot@users.noreply.github.com
           message: Update Data
-          pull: '--rebase --autostash'
+          pull: '-r --autostash'
