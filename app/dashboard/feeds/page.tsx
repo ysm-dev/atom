@@ -287,8 +287,8 @@ const InputItem = memo(
         await sendDiscordMessage(webhookURL, {
           username:
             title
-              ?.replace('Discord', 'Dïscord')
-              .replace('discord', 'dïscord')
+              ?.replaceAll('Discord', 'Dïscord')
+              .replaceAll('discord', 'dïscord')
               .slice(0, 80) ?? url,
           avatar_url: favicon,
           content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
