@@ -15,6 +15,7 @@ import { run } from 'scripts/crons/run_job'
 import { type Channels } from 'server/feeds'
 import { archive } from 'utils/archive'
 import { binaryToText, textToBinary } from 'utils/binary'
+import { getFaviconURI } from 'utils/getFaviconURI'
 import { isURL } from 'utils/isURL'
 import { parse, stringify } from 'utils/json'
 import { GUILD_ID, env } from 'utils/secrets'
@@ -131,7 +132,7 @@ async function main() {
                         .replace('Discord', 'Dïscord')
                         .replace('discord', 'dïscord')
                         .slice(0, 80) ?? url,
-                    avatar_url: favicon,
+                    avatar_url: getFaviconURI(itemLink),
                     content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
                   })
 

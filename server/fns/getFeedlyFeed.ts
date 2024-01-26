@@ -24,9 +24,14 @@ export const getFeedlyFeed = async (url: string) => {
         Referer: `https://feedly.com/`,
       },
     },
-  ).then<R>((r) => r.json())
+  )
+    .then<R>((r) => r.json())
+    .catch((e) => {
+      console.log(e)
+      return null
+    })
 
-  const result = data.results?.[0]
+  const result = data?.results?.[0]
 
   if (!result) {
     return {
