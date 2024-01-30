@@ -133,7 +133,10 @@ async function main() {
                         .replaceAll('discord', 'dïscord')
                         .slice(0, 80) ?? url,
                     avatar_url: getFaviconURI(itemLink),
-                    content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
+                    content: `${itemLink}\n\n${itemTitle.trim()}`.slice(
+                      0,
+                      2000,
+                    ),
                   })
 
                   if (id) {

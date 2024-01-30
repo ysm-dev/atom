@@ -291,7 +291,7 @@ const InputItem = memo(
               .replaceAll('discord', 'dïscord')
               .slice(0, 80) ?? url,
           avatar_url: favicon,
-          content: `${itemLink}\n\n${itemTitle}`.slice(0, 2000),
+          content: `${itemLink}\n\n${itemTitle.trim()}`.slice(0, 2000),
         })
 
         toast.success(`Test RSS sent to #${name} !`)

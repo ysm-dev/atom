@@ -5,7 +5,7 @@ export function decodeHTMLEntities(text: string): string {
     amp: '&',
     lt: '<',
     gt: '>',
-    // Add other HTML entities here if needed
+    nbsp: ' ',
   }
 
   return text.replace(/&([^;]+);/g, (match: string, entity: string): string => {
