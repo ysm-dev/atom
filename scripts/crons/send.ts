@@ -95,7 +95,7 @@ async function main() {
           }
 
           if (!json) {
-            console.log(`Failed!!: `, url)
+            console.log(`Failed!!: `, url, xmlURL)
             return
           }
 

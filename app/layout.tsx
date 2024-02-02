@@ -9,14 +9,14 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
+    <html lang="en" className="scrollbar-hide">
       <head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
       </head>
-      <body className="scrollbar-hide dark">
+      <body className="dark scrollbar-hide">
         <Toaster
           // expand
           // duration={100000}

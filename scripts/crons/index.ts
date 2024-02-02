@@ -80,7 +80,7 @@ async function main() {
           })
             .then((r) => r.text())
             .catch((e) => {
-              console.log(`Failed!!: `, xmlURL, e)
+              console.log(`1. Failed!!: `, url, xmlURL, e)
               return null
             })
 
@@ -95,7 +95,7 @@ async function main() {
           })
 
           if (!rss) {
-            console.log(`Failed!!: `, xmlURL)
+            console.log(`2. Failed!!: `, url, xmlURL)
             return
           }
 
