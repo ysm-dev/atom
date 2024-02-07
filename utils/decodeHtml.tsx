@@ -6,6 +6,11 @@ export function decodeHTMLEntities(text: string): string {
     lt: '<',
     gt: '>',
     nbsp: ' ',
+    '#8217': "'",
+    '#8220': '"',
+    '#8221': '"',
+    '#8211': '-',
+    '#8212': '--',
   }
 
   return text.replace(/&([^;]+);/g, (match: string, entity: string): string => {

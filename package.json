@@ -5,7 +5,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "concurrently --kill-others \"next dev\" \"wrangler dev --test-scheduled\"",
+    "dev": "concurrently --kill-others \"next dev -p 3008\" \"wrangler dev --test-scheduled\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
