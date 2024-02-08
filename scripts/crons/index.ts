@@ -50,8 +50,12 @@ async function main() {
     toArray,
   )
 
+  let now = performance.now()
+
   // remove all files in generated
   await $`rm -rf ./generated/*`
+
+  console.log(`Removed all files in generated in ${performance.now() - now}ms`)
 
   await pipe(
     data,
@@ -60,6 +64,8 @@ async function main() {
     map(async (ch) => {
       // const webhookURL = ch.webhookURL!
       const { feeds } = ch
+
+      if (Object.keys(feeds).length === 0) return
 
       await pipe(
         feeds,
@@ -131,7 +137,7 @@ async function main() {
             return
           }
 
-          const xml = await res.text()
+          const xml = (await res.text()).trim()
 
           if (!isRSS(xml)) {
             console.error(`Not RSS: `, url, xmlURL)
@@ -169,17 +175,15 @@ async function main() {
 
           await writeFile(`./generated/${cid}.bin`, bin, 'binary')
         }),
-        concurrent(20),
+        concurrent(Object.keys(feeds).length),
         toArray,
       )
     }),
-    concurrent(10),
+    concurrent(Object.keys(data).length),
     toArray,
   )
 
-  // console.log(data)
-
-  console.log(`Done!`)
+  console.log(`Done in ${performance.now() - now}ms`)
 }
 
 main()
