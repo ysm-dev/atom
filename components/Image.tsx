@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { Loader } from 'components/Loader'
 import NextImage, { type ImageProps } from 'next/image'
 
 type Props = {
@@ -32,5 +33,7 @@ export function Image({ src, ...props }: Props) {
 
   return !!url ? (
     <NextImage unoptimized priority key={url} src={url} {...props} />
-  ) : null
+  ) : (
+    <Loader className="aspect-square h-4 w-4 animate-spin opacity-50" />
+  )
 }

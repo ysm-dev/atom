@@ -57,6 +57,8 @@ async function main() {
 
   console.log(`Removed all files in generated in ${performance.now() - now}ms`)
 
+  const TIMEOUT = ms(`20s`)
+
   await pipe(
     data,
     values,
@@ -86,7 +88,7 @@ async function main() {
               Accept: `*/*`,
               'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
             },
-            signal: AbortSignal.timeout(ms(`10s`)),
+            signal: AbortSignal.timeout(TIMEOUT),
           })
             .then((res) => {
               if (res.status === 429) {
@@ -95,7 +97,7 @@ async function main() {
                     Accept: `*/*`,
                     'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
                   },
-                  signal: AbortSignal.timeout(ms(`10s`)),
+                  signal: AbortSignal.timeout(TIMEOUT),
                 }).catch((e) => {
                   console.error(`Failed to fetch ${url}`, e)
                   return res
@@ -110,7 +112,7 @@ async function main() {
                   Accept: `*/*`,
                   'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
                 },
-                signal: AbortSignal.timeout(ms(`10s`)),
+                signal: AbortSignal.timeout(TIMEOUT),
               }).catch((e) => {
                 console.error(`Failed to fetch ${url}`, e)
                 return res
