@@ -76,7 +76,7 @@ async function main() {
         map(async ({ url, xmlURL, cid }) => {
           const res = await fetch(xmlURL!, {
             headers: {
-              accept: `application/atom+xml;application/rss+xml`,
+              Accept: `*/*`,
             },
             signal: AbortSignal.timeout(ms(`10s`)),
           })
