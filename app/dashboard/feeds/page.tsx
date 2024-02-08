@@ -7,6 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Image } from 'components/Image'
+import { Loader } from 'components/Loader'
 import { Button } from 'components/ui/button'
 import { Input } from 'components/ui/input'
 import { Switch } from 'components/ui/switch'
@@ -16,7 +17,7 @@ import { useFeed, type getFeed } from 'hooks/useFeed'
 import { useRecentPosts } from 'hooks/useRecentPosts'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import { cn } from 'lib/utils'
-import { GripVertical, Loader, SendHorizonal } from 'lucide-react'
+import { GripVertical, SendHorizonal } from 'lucide-react'
 import {
   memo,
   useCallback,
@@ -72,7 +73,7 @@ export default function Page() {
   const {
     control,
     handleSubmit,
-    formState: { isDirty },
+    formState: { isDirty, isSubmitting },
     setValue,
   } = form
 
@@ -165,13 +166,13 @@ export default function Page() {
       const yes = confirm(`Are you sure you want to add this feed?`)
 
       if (yes) {
-        setFeeds(result)
+        await setFeeds(result)
       }
 
       return
     }
 
-    setFeeds(result)
+    await setFeeds(result)
 
     console.log(`Saved!`, Object.keys(result).length)
   })
@@ -187,39 +188,44 @@ export default function Page() {
   )
 
   return (
-    <FormProvider {...form}>
-      <form
-        id="form"
-        className="mx-auto flex w-full max-w-screen-sm flex-col gap-1"
-        onSubmit={onSubmit}
-        ref={formRef}
-      >
-        <Reorder.Group
-          // className="flex flex-col"
-          axis="y"
-          values={items}
-          onReorder={(items) => {
-            setItems(items)
-            replace(items)
-            // debouncedSave()
-          }}
+    <div className="relative">
+      {isSubmitting && (
+        <Loader className="absolute right-1 top-1 aspect-square h-4 w-4" />
+      )}
+      <FormProvider {...form}>
+        <form
+          id="form"
+          className="mx-auto flex w-full max-w-screen-sm flex-col gap-1"
+          onSubmit={onSubmit}
+          ref={formRef}
         >
-          {items.map((item, i) => (
-            <InputItem
-              key={item.id}
-              i={i}
-              formRef={formRef}
-              className=""
-              item={item}
-              fieldArray={fieldsArray}
-              setItems={setItems}
-              save={save}
-            />
-          ))}
-        </Reorder.Group>
-      </form>
-      <div className="h-96"></div>
-    </FormProvider>
+          <Reorder.Group
+            // className="flex flex-col"
+            axis="y"
+            values={items}
+            onReorder={(items) => {
+              setItems(items)
+              replace(items)
+              // debouncedSave()
+            }}
+          >
+            {items.map((item, i) => (
+              <InputItem
+                key={item.id}
+                i={i}
+                formRef={formRef}
+                className=""
+                item={item}
+                fieldArray={fieldsArray}
+                setItems={setItems}
+                save={save}
+              />
+            ))}
+          </Reorder.Group>
+        </form>
+        <div className="h-96"></div>
+      </FormProvider>
+    </div>
   )
 }
 
