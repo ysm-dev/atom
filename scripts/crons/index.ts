@@ -82,7 +82,7 @@ async function main() {
           })
 
           if (!res.ok) {
-            if (res.headers.get(`X-Served-By`) === `Substack`) {
+            if (url.includes(`.substack.com`)) {
               return
             }
             console.error(`Dead Link: `, url, xmlURL)
