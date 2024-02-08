@@ -99,6 +99,7 @@ async function main() {
               }
             })
             .catch((e) => {
+              console.error(`Fetch Failed: `, url, xmlURL, e)
               return {
                 ok: false,
                 status: 999,
