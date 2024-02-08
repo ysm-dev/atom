@@ -9,10 +9,13 @@ import {
 } from '@fxts/core'
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
+import { sendDiscordMessage } from 'lib/sendDiscordMessage'
 import ms from 'ms'
 import { type Channels } from 'server/feeds'
 import { textToBinary } from 'utils/binary'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
+import { getFaviconURI } from 'utils/getFaviconURI'
+import { isRSS } from 'utils/isRSS'
 import { isURL } from 'utils/isURL'
 import { stringify } from 'utils/json'
 import { GUILD_ID } from 'utils/secrets'
@@ -71,20 +74,33 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          // console.log(url, xmlURL)
-          const xml = await fetch(xmlURL!, {
+          const res = await fetch(xmlURL!, {
             headers: {
               accept: `application/atom+xml;application/rss+xml`,
             },
-            signal: AbortSignal.timeout(ms(`5s`)),
+            signal: AbortSignal.timeout(ms(`10s`)),
           })
-            .then((r) => r.text())
-            .catch((e) => {
-              console.log(`1. Failed!!: `, url, xmlURL, e)
-              return null
-            })
 
-          if (!xml) {
+          if (!res.ok) {
+            console.error(`Dead Link: `, url, xmlURL)
+            await sendDiscordMessage(
+              `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
+              {
+                username: xmlURL!
+                  .replaceAll('Discord', 'Dïscord')
+                  .replaceAll('discord', 'dïscord')
+                  .slice(0, 80),
+                avatar_url: getFaviconURI(url),
+                content: `Dead link: ${url} (${res.status})`,
+              },
+            )
+            return
+          }
+
+          const xml = await res.text()
+
+          if (!isRSS(xml)) {
+            console.error(`Not RSS: `, url, xmlURL)
             return
           }
 
@@ -95,7 +111,7 @@ async function main() {
           })
 
           if (!rss) {
-            console.log(`2. Failed!!: `, url, xmlURL)
+            console.error(`Failed to parse RSS: `, url, xmlURL)
             return
           }
 

@@ -289,8 +289,8 @@ const InputItem = memo(
             title
               ?.replaceAll('Discord', 'Dïscord')
               .replaceAll('discord', 'dïscord')
-              .slice(0, 80) ?? url,
-          avatar_url: favicon,
+              .slice(0, 80) ?? url!,
+          avatar_url: favicon!,
           content: `${itemLink}\n\n${itemTitle.trim()}`.slice(0, 2000),
         })
 
