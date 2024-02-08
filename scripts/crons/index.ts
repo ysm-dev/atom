@@ -75,7 +75,7 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          let res = await fetch(xmlURL!, {
+          let res: Response = await fetch(xmlURL!, {
             headers: {
               Accept: `*/*`,
               'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
@@ -99,12 +99,16 @@ async function main() {
               }
             })
             .catch((e) => {
-              console.error(`Fetch Failed: `, url, xmlURL, e)
-              return {
-                ok: false,
-                status: 999,
-                text: async () => e.toString(),
-              }
+              return fetch(`${PROXY_URL}/${xmlURL}`, {
+                headers: {
+                  Accept: `*/*`,
+                  'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
+                },
+                signal: AbortSignal.timeout(ms(`10s`)),
+              }).catch((e) => {
+                console.error(`Failed to fetch ${url}`, e)
+                return res
+              })
             })
 
           if (!res.ok) {
