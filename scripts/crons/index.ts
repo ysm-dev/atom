@@ -18,6 +18,7 @@ import { getFaviconURI } from 'utils/getFaviconURI'
 import { isRSS } from 'utils/isRSS'
 import { isURL } from 'utils/isURL'
 import { stringify } from 'utils/json'
+import { PROXY_URL } from 'utils/proxy'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
@@ -74,9 +75,10 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          const res = await fetch(xmlURL!, {
+          let res = await fetch(xmlURL!, {
             headers: {
               Accept: `*/*`,
+              'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
             },
             signal: AbortSignal.timeout(ms(`10s`)),
           })
@@ -85,19 +87,30 @@ async function main() {
             if (url.includes(`.substack.com`)) {
               return
             }
-            console.error(`Dead Link: `, url, xmlURL)
-            await sendDiscordMessage(
-              `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
-              {
-                username: xmlURL!
-                  .replaceAll('Discord', 'Dïscord')
-                  .replaceAll('discord', 'dïscord')
-                  .slice(0, 80),
-                avatar_url: getFaviconURI(url),
-                content: `Dead link: ${url} (${res.status})`,
-              },
-            )
-            return
+
+            if (res.status === 429) {
+              res = await fetch(`${PROXY_URL}/${xmlURL}`, {
+                headers: {
+                  Accept: `*/*`,
+                  'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
+                },
+                signal: AbortSignal.timeout(ms(`10s`)),
+              })
+            } else {
+              console.error(`Dead Link: `, url, xmlURL)
+              await sendDiscordMessage(
+                `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
+                {
+                  username: xmlURL!
+                    .replaceAll('Discord', 'Dïscord')
+                    .replaceAll('discord', 'dïscord')
+                    .slice(0, 80),
+                  avatar_url: getFaviconURI(url),
+                  content: `Dead link: ${url} (${res.status})`,
+                },
+              )
+              return
+            }
           }
 
           const xml = await res.text()
