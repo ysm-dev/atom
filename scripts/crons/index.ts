@@ -18,7 +18,6 @@ import { getFaviconURI } from 'utils/getFaviconURI'
 import { isRSS } from 'utils/isRSS'
 import { isURL } from 'utils/isURL'
 import { stringify } from 'utils/json'
-import { PROXY_URL } from 'utils/proxy'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
@@ -75,23 +74,17 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          let res = await fetch(xmlURL!, {
+          const res = await fetch(xmlURL!, {
             headers: {
               accept: `application/atom+xml;application/rss+xml`,
             },
             signal: AbortSignal.timeout(ms(`10s`)),
           })
 
-          if (res.headers.get(`X-Served-By`) === `Substack`) {
-            res = await fetch(`${PROXY_URL}/${xmlURL}`, {
-              headers: {
-                accept: `application/atom+xml;application/rss+xml`,
-              },
-              signal: AbortSignal.timeout(ms(`10s`)),
-            })
-          }
-
           if (!res.ok) {
+            if (res.headers.get(`X-Served-By`) === `Substack`) {
+              return
+            }
             console.error(`Dead Link: `, url, xmlURL)
             await sendDiscordMessage(
               `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
