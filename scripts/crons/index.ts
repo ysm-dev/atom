@@ -81,15 +81,9 @@ async function main() {
               'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
             },
             signal: AbortSignal.timeout(ms(`10s`)),
-          })
-
-          if (!res.ok) {
-            if (url.includes(`.substack.com`)) {
-              return
-            }
-
+          }).then((res) => {
             if (res.status === 429) {
-              res = await fetch(`${PROXY_URL}/${xmlURL}`, {
+              return fetch(`${PROXY_URL}/${xmlURL}`, {
                 headers: {
                   Accept: `*/*`,
                   'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
@@ -97,20 +91,28 @@ async function main() {
                 signal: AbortSignal.timeout(ms(`10s`)),
               })
             } else {
-              console.error(`Dead Link: `, url, xmlURL)
-              await sendDiscordMessage(
-                `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
-                {
-                  username: xmlURL!
-                    .replaceAll('Discord', 'Dïscord')
-                    .replaceAll('discord', 'dïscord')
-                    .slice(0, 80),
-                  avatar_url: getFaviconURI(url),
-                  content: `Dead link: ${url} (${res.status})`,
-                },
-              )
+              return res
+            }
+          })
+
+          if (!res.ok) {
+            if (url.includes(`.substack.com`)) {
               return
             }
+
+            console.error(`Dead Link: `, url, xmlURL)
+            await sendDiscordMessage(
+              `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
+              {
+                username: xmlURL!
+                  .replaceAll('Discord', 'Dïscord')
+                  .replaceAll('discord', 'dïscord')
+                  .slice(0, 80),
+                avatar_url: getFaviconURI(url),
+                content: `Dead link: (${res.status}) ${url} (${xmlURL})`,
+              },
+            )
+            return
           }
 
           const xml = await res.text()
