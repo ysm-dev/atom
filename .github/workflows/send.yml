@@ -32,4 +32,5 @@ jobs:
           author_name: Bot
           author_email: bot@users.noreply.github.com
           message: Update State
-          # pull: '--rebase --autostash'
+          fetch: false
+          pull: '--rebase --autostash'
