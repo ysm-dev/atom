@@ -34,3 +34,7 @@ jobs:
           message: Update State
           fetch: false
           # pull: '--rebase --autostash'
+
+      - run: bunx tsx scripts/crons/run.ts
+        env:
+          GITHUB_PAT: ${{ secrets.PAT }}

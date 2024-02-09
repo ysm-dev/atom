@@ -4,10 +4,10 @@ on:
   repository_dispatch:
     types:
       - update
-  workflow_run:
-    workflows: [Send]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: [Send]
+  #   types:
+  #     - completed
   workflow_dispatch:
 
 jobs:
