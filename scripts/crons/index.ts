@@ -83,7 +83,7 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          let res: Response = await fetch(xmlURL!, {
+          let res: Response | null = await fetch(xmlURL!, {
             headers: {
               Accept: `*/*`,
               'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
@@ -115,15 +115,11 @@ async function main() {
                 signal: AbortSignal.timeout(TIMEOUT),
               }).catch((e) => {
                 console.error(`Failed to fetch ${url}`, e)
-                return res
+                return null
               })
             })
 
-          if (!res.ok) {
-            if (url.includes(`.substack.com`)) {
-              return
-            }
-
+          if (!res?.ok) {
             console.error(`Dead Link: `, url, xmlURL)
             await sendDiscordMessage(
               `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
@@ -133,7 +129,7 @@ async function main() {
                   .replaceAll('discord', 'dïscord')
                   .slice(0, 80),
                 avatar_url: getFaviconURI(url),
-                content: `Dead link: (${res.status}) ${url} (${xmlURL})`,
+                content: `Dead link: (${res?.status || `?`}) ${url} (${xmlURL})`,
               },
             )
             return
