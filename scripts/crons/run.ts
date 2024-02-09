@@ -16,3 +16,5 @@ export const run = async (PAT = env().GITHUB_PAT) => {
     }),
   ])
 }
+
+run()
