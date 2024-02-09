@@ -4,6 +4,10 @@ on:
   repository_dispatch:
     types:
       - update
+  workflow_run:
+    workflows: [Send]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
@@ -30,4 +34,4 @@ jobs:
           author_name: Bot
           author_email: bot@users.noreply.github.com
           message: Update Data
-          pull: '-r --autostash'
+          # pull: '-r --autostash'
