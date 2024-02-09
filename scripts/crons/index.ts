@@ -120,7 +120,12 @@ async function main() {
             })
 
           if (!res?.ok) {
-            console.error(`Dead Link: `, url, xmlURL)
+            console.error(`Dead Link: `, url, xmlURL, res?.status)
+
+            if (res?.status === 418) {
+              return
+            }
+
             await sendDiscordMessage(
               `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
               {
