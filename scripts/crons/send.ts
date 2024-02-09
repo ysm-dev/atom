@@ -11,14 +11,13 @@ import {
 } from '@fxts/core'
 import { readFile, writeFile } from 'fs/promises'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
-import { run } from 'scripts/crons/run_job'
 import { type Channels } from 'server/feeds'
 import { archive } from 'utils/archive'
 import { binaryToText, textToBinary } from 'utils/binary'
 import { getFaviconURI } from 'utils/getFaviconURI'
 import { isURL } from 'utils/isURL'
 import { parse, stringify } from 'utils/json'
-import { GUILD_ID, env } from 'utils/secrets'
+import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
 
@@ -187,7 +186,7 @@ async function main() {
     toArray,
   )
 
-  await run(env().GITHUB_PAT)
+  // await run(env().GITHUB_PAT)
 }
 
 main()
