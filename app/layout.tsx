@@ -13,7 +13,7 @@ export default function RootLayout({ children }: Props) {
       <head>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+          content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, maximum-scale=1"
         />
       </head>
       <body className="dark scrollbar-hide">
