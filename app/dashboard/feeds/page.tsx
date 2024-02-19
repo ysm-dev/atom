@@ -415,7 +415,7 @@ const InputItem = memo(
             <div className="absolute right-0.5 top-0.5 aspect-square h-5 w-5 rounded-sm bg-black">
               <Image
                 src={data.favicon}
-                className="rounded-full p-px"
+                className="aspect-square h-full w-full rounded-full p-px"
                 width={100}
                 height={100}
                 alt={`${data.title} favicon`}
