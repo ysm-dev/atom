@@ -190,7 +190,7 @@ export default function Page() {
   return (
     <div className="relative">
       {isSubmitting && (
-        <Loader className="absolute right-1 top-1 aspect-square h-4 w-4" />
+        <Loader className="fixed right-1 top-1 aspect-square h-4 w-4" />
       )}
       <FormProvider {...form}>
         <form
