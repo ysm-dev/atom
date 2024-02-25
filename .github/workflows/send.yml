@@ -28,10 +28,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           GITHUB_PAT: ${{ secrets.PAT }}
 
-      - run: bunx tsx scripts/crons/run.ts
-        env:
-          GITHUB_PAT: ${{ secrets.PAT }}
-
       - uses: EndBug/add-and-commit@main
         with:
           author_name: Bot
@@ -39,3 +35,7 @@ jobs:
           message: Update State
           fetch: false
           # pull: '--rebase --autostash'
+
+      - run: bunx tsx scripts/crons/run.ts
+        env:
+          GITHUB_PAT: ${{ secrets.PAT }}
