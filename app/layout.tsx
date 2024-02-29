@@ -1,4 +1,5 @@
 import 'app/globals.css'
+
 import { QueryProvider } from 'components/QueryProvider'
 import { type ReactNode } from 'react'
 import { Toaster } from 'sonner'

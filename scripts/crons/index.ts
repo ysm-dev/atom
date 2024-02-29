@@ -169,7 +169,9 @@ async function main() {
                   title && typeof title === 'string'
                     ? decodeHTMLEntities(title)
                     : 'Untitled',
-                link: isURL(link) ? link : `${new URL(url).origin}${link}`,
+                link: isURL(link)
+                  ? decodeHTMLEntities(link!)
+                  : `${new URL(url).origin}${link}`,
               })),
             }),
           )
