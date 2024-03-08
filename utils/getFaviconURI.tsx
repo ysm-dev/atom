@@ -85,6 +85,10 @@ export const getFaviconURI = (url: string): string => {
       const handle = pathname.split('/').pop()
       return `https://img.ysm.dev/substack/${handle}`
     }
+    if (pathname.startsWith('/api/warpcast/')) {
+      const handle = pathname.split('/').pop()
+      return `https://img.ysm.dev/warpcast/${handle}`
+    }
   }
 
   return `https://app.ray.st/api/favicon/${host}`
