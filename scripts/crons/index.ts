@@ -1,8 +1,10 @@
 import {
   concurrent,
   filter,
+  keys,
   map,
   pipe,
+  sort,
   toArray,
   toAsync,
   values,
@@ -43,24 +45,24 @@ async function main() {
     throw new Error(`No data found for guild ${GUILD_ID}`)
   }
 
-  pipe(
-    data,
-    values,
-    map((ch) => {
-      console.log(ch.name, Object.values(ch.feeds).length)
-      pipe(
-        ch.feeds,
-        values,
-        map((feed) => {
-          console.log(`  ${feed.url}`)
-          return feed
-        }),
-        toArray,
-      )
-      return ch
-    }),
-    toArray,
-  )
+  // pipe(
+  //   data,
+  //   values,
+  //   map((ch) => {
+  //     console.log(ch.name, Object.values(ch.feeds).length)
+  //     pipe(
+  //       ch.feeds,
+  //       values,
+  //       map((feed) => {
+  //         console.log(`  ${feed.url}`)
+  //         return feed
+  //       }),
+  //       toArray,
+  //     )
+  //     return ch
+  //   }),
+  //   toArray,
+  // )
 
   let now = performance.now()
 
@@ -72,6 +74,8 @@ async function main() {
   await pipe(
     data,
     values,
+    // shuffle
+    sort(() => (Math.random() > 0.5 ? 1 : -1)),
     toAsync,
     map(async (ch) => {
       // const webhookURL = ch.webhookURL!
@@ -176,7 +180,7 @@ async function main() {
         toArray,
       )
     }),
-    concurrent(1),
+    concurrent([...keys(data)].length / 5),
     toArray,
   )
 
