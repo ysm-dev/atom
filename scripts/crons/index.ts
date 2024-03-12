@@ -172,11 +172,11 @@ async function main() {
 
           await writeFile(`./generated/${cid}.bin`, bin, 'binary')
         }),
-        concurrent(Object.keys(feeds).length),
+        concurrent(100),
         toArray,
       )
     }),
-    concurrent(Object.keys(data).length),
+    concurrent(1),
     toArray,
   )
 
