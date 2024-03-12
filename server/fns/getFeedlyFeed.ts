@@ -5,7 +5,7 @@ import { FEEDLY_TOKEN } from 'utils/secrets'
 
 export const getFeedlyFeed = async (url: string) => {
   const data = await fetch(
-    `${PROXY_URL}/https://api.feedly.com/v3/search/feeds?${new URLSearchParams({
+    `${PROXY_URL}https://api.feedly.com/v3/search/feeds?${new URLSearchParams({
       q: url!,
       n: '8',
       withWebsite: 'true',

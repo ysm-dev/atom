@@ -100,7 +100,7 @@ async function main() {
           let res: FetchResponse<any> | null = await fetch(xmlURL!)
             .then((res) => {
               if (res.status === 429) {
-                return fetch(`${PROXY_URL}/${xmlURL}`).catch((e) => {
+                return fetch(`${PROXY_URL}${xmlURL}`).catch((e) => {
                   console.error(`Failed to fetch ${url}`, e)
                   return res
                 })
@@ -109,7 +109,7 @@ async function main() {
               }
             })
             .catch((e) => {
-              return fetch(`${PROXY_URL}/${xmlURL}`).catch((e) => {
+              return fetch(`${PROXY_URL}${xmlURL}`).catch((e) => {
                 console.error(`Failed to fetch ${url}`, e)
                 return null
               })
