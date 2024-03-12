@@ -10,7 +10,7 @@ import {
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
-import { ofetch } from 'ofetch'
+import { ofetch, type FetchResponse } from 'ofetch'
 import { type Channels } from 'server/feeds'
 import { textToBinary } from 'utils/binary'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
@@ -28,13 +28,13 @@ const fetch = ofetch.create({
   parseResponse: (txt) => txt,
   retry: 3,
   retryDelay: 500,
-  timeout: 5000,
+  timeout: 20000,
   keepalive: true,
   headers: {
     Accept: `*/*`,
     'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
   },
-}).native
+}).raw
 
 async function main() {
   const data = await storage().getItem<Channels>(`feeds:${GUILD_ID}`)
@@ -93,7 +93,7 @@ async function main() {
           }
         }),
         map(async ({ url, xmlURL, cid }) => {
-          let res: Response | null = await fetch(xmlURL!)
+          let res: FetchResponse<any> | null = await fetch(xmlURL!)
             .then((res) => {
               if (res.status === 429) {
                 return fetch(`${PROXY_URL}/${xmlURL}`).catch((e) => {
@@ -132,7 +132,7 @@ async function main() {
             return
           }
 
-          const xml = (await res.text()).trim()
+          const xml = res._data.trim()
 
           if (!isRSS(xml)) {
             console.error(`Not RSS: `, url, xmlURL)
