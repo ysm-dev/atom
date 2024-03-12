@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 
-export const proxy = new Hono().get(`/proxy/:url`, async (c) => {
+export const proxy = new Hono().get(`/proxy/*`, async (c) => {
   const url = c.req.path.replace('/proxy/', '')
 
   const result = await fetch(url, {
