@@ -1,1 +1,3 @@
-export const PROXY_URL = `https://atom.ysmdev.workers.dev/proxy/`
+// export const PROXY_URL = `${getServerURL()}/proxy/`
+
+export const PROXY_URL = `https://pproxy.deno.dev/`
