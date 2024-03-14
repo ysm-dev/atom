@@ -17,6 +17,7 @@ import { type Channels } from 'server/feeds'
 import { textToBinary } from 'utils/binary'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getFaviconURI } from 'utils/getFaviconURI'
+import { getServerURL } from 'utils/getServerURL'
 import { isRSS } from 'utils/isRSS'
 import { isURL } from 'utils/isURL'
 import { stringify } from 'utils/json'
@@ -99,8 +100,8 @@ async function main() {
         map(async ({ url, xmlURL, cid }) => {
           let res: FetchResponse<any> | null = await fetch(xmlURL!)
             .then((res) => {
-              if (res.status === 429) {
-                return fetch(`${PROXY_URL}${xmlURL}`).catch((e) => {
+              if (!res.ok) {
+                return fetch(`${getServerURL()}/proxy/${xmlURL}`).catch((e) => {
                   console.error(`Failed to fetch ${url}`, e)
                   return res
                 })
