@@ -22,7 +22,6 @@ import { getServerURL } from 'utils/getServerURL'
 import { isRSS } from 'utils/isRSS'
 import { isURL } from 'utils/isURL'
 import { stringify } from 'utils/json'
-import { PROXY_URL } from 'utils/proxy'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
@@ -111,7 +110,7 @@ async function main() {
               }
             })
             .catch((e) => {
-              return fetch(`${PROXY_URL}${xmlURL}`).catch((e) => {
+              return fetch(`${getServerURL()}/proxy/${xmlURL}`).catch((e) => {
                 console.error(`Failed to fetch ${url}`, e)
                 return null
               })
