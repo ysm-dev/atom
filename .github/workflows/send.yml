@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@master
 
       - run: bun i
-      - run: bun scripts/crons/send.ts
+      - run: bun run tsx scripts/crons/send.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           GITHUB_PAT: ${{ secrets.PAT }}
@@ -36,6 +36,6 @@ jobs:
           fetch: false
           # pull: '--rebase --autostash'
 
-      - run: bun scripts/crons/run.ts
+      - run: bun run tsx scripts/crons/run.ts
         env:
           GITHUB_PAT: ${{ secrets.PAT }}

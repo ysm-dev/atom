@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@master
 
       - run: bun i
-      - run: bun scripts/crons/index.ts
+      - run: bun run tsx scripts/crons/index.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
