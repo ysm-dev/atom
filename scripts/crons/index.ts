@@ -12,6 +12,7 @@ import {
 import { writeFile } from 'fs/promises'
 import { parseString } from 'lib/parseString'
 import { sendDiscordMessage } from 'lib/sendDiscordMessage'
+import ms from 'ms'
 import { ofetch, type FetchResponse } from 'ofetch'
 import { type Channels } from 'server/feeds'
 import { textToBinary } from 'utils/binary'
@@ -31,7 +32,7 @@ const fetch = ofetch.create({
   parseResponse: (txt) => txt,
   retry: 3,
   retryDelay: 500,
-  timeout: 20000,
+  timeout: ms('3m'),
   keepalive: true,
   headers: {
     Accept: `*/*`,
