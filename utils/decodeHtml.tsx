@@ -11,6 +11,7 @@ export function decodeHTMLEntities(text: string): string {
     '#8221': '"',
     '#8211': '-',
     '#8212': '--',
+    '&#x27;': "'",
   }
 
   return text.replace(/&([^;]+);/g, (match: string, entity: string): string => {
