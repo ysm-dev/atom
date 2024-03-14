@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 
 export const proxy = new Hono().get(`/proxy/*`, async (c) => {
-  const url = c.req.path.replace('/proxy/', '')
+  const { origin } = new URL(c.req.url)
+  const url = `${c.req.url.replace(`${origin}/proxy/`, ``)}`
 
   const result = await fetch(url, {
     headers: {

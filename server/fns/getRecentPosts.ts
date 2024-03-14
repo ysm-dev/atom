@@ -20,9 +20,7 @@ export const getRecentPosts = async (params: Params) => {
           'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36`,
         },
       }).then((r) => r.text())
-    : fetch(
-        `${getServerURL()}/proxy?${new URLSearchParams({ url: xmlURL! })}`,
-      ).then((r) => r.text()))
+    : fetch(`${getServerURL()}/proxy/${xmlURL!}`).then((r) => r.text()))
 
   const rss = await parseString({ xml, url: xmlURL!, xmlURL: xmlURL! })
 
