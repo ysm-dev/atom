@@ -37,7 +37,8 @@ const fetch = ofetch.create({
     Accept: `*/*`,
     'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36`,
   },
-}).raw
+  ignoreResponseError: true,
+}).native
 
 async function main() {
   const data = await storage().getItem<Channels>(`feeds:${GUILD_ID}`)
@@ -77,13 +78,9 @@ async function main() {
     values,
     // shuffle
     sort(() => (Math.random() > 0.5 ? 1 : -1)),
+    filter(({ feeds }) => [...keys(feeds)].length > 0),
     toAsync,
-    map(async (ch) => {
-      // const webhookURL = ch.webhookURL!
-      const { feeds } = ch
-
-      if (Object.keys(feeds).length === 0) return
-
+    map(async ({ feeds }) => {
       await pipe(
         feeds,
         values,
@@ -137,7 +134,7 @@ async function main() {
             return
           }
 
-          const xml = res._data.trim()
+          const xml = (await res.text()).trim()
 
           if (!isRSS(xml)) {
             console.error(`Not RSS: `, url, xmlURL)
