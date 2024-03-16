@@ -58,10 +58,15 @@ export const getFaviconURI = (url: string): string => {
     return `https://img.ysm.dev/disquiet/${handle}`
   }
 
-  if (host === 'rss.ysm.dev') {
+  if (['rss.ysm.dev', 'r.ysm.dev'].includes(host)) {
     if (pathname.split('/')[2]?.includes('.')) {
       return `https://app.ray.st/api/favicon/${pathname.split('/')[2]}`
     }
+
+    if (pathname.split('/')[1]?.includes('.')) {
+      return `https://app.ray.st/api/favicon/${pathname.split('/')[1]}`
+    }
+
     if (
       pathname.startsWith('/api/twitter/user/') ||
       pathname.startsWith('/api/x/user/')
