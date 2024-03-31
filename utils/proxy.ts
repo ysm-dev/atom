@@ -1,3 +1,5 @@
-// export const PROXY_URL = `${getServerURL()}/proxy/`
+import { getServerURL } from 'utils/getServerURL'
 
-export const PROXY_URL = `https://pproxy.deno.dev/`
+export const PROXY_URL = `${getServerURL()}/proxy/`
+
+// export const PROXY_URL = `https://pproxy.deno.dev/`
