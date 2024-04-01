@@ -21,7 +21,7 @@ import { getFaviconURI } from 'utils/getFaviconURI'
 import { isRSS } from 'utils/isRSS'
 import { isURL } from 'utils/isURL'
 import { stringify } from 'utils/json'
-import { PROXY_URL } from 'utils/proxy'
+import { getProxy } from 'utils/proxy'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
@@ -98,7 +98,7 @@ async function main() {
           let res: FetchResponse<any> | null = await fetch(xmlURL!)
             .then((res) => {
               if (!res.ok) {
-                return fetch(`${PROXY_URL}${xmlURL}`).catch((e) => {
+                return fetch(`${getProxy()}${xmlURL}`).catch((e) => {
                   console.error(`Failed to fetch ${url}`, e)
                   return res
                 })
@@ -107,7 +107,7 @@ async function main() {
               }
             })
             .catch((e) => {
-              return fetch(`${PROXY_URL}${xmlURL}`).catch((e) => {
+              return fetch(`${getProxy()}${xmlURL}`).catch((e) => {
                 console.error(`Failed to fetch ${url}`, e)
                 return null
               })
