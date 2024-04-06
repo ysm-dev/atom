@@ -1,24 +1,21 @@
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getFaviconURI } from 'utils/getFaviconURI'
-import { isServer } from 'utils/isServer'
 import { getProxy } from 'utils/proxy'
 import { FEEDLY_TOKEN } from 'utils/secrets'
 
 export const getFeedlyFeed = async (url: string) => {
   const data = await fetch(
-    `${isServer() ? '' : getProxy()}https://api.feedly.com/v3/search/feeds?${new URLSearchParams(
-      {
-        q: url!,
-        n: '8',
-        withWebsite: 'true',
-        autocomplete: 'true',
-        fullTerm: 'false',
-        locale: 'en',
-        ct: 'feedly.desktop',
-        cv: `31.0.2160`,
-        ck: `${Date.now()}`,
-      },
-    )}`,
+    `${getProxy()}https://api.feedly.com/v3/search/feeds?${new URLSearchParams({
+      q: url!,
+      n: '8',
+      withWebsite: 'true',
+      autocomplete: 'true',
+      fullTerm: 'false',
+      locale: 'en',
+      ct: 'feedly.desktop',
+      cv: `31.0.2160`,
+      ck: `${Date.now()}`,
+    })}`,
     {
       headers: {
         Authorization: `Bearer ${FEEDLY_TOKEN}`,
