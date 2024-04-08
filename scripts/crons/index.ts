@@ -120,17 +120,20 @@ async function main() {
               return
             }
 
-            await sendDiscordMessage(
-              `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
-              {
-                username: xmlURL!
-                  .replaceAll('Discord', 'Dïscord')
-                  .replaceAll('discord', 'dïscord')
-                  .slice(0, 80),
-                avatar_url: getFaviconURI(url),
-                content: `Dead link: (${res?.status || `?`}) ${url} (${xmlURL})`,
-              },
-            )
+            if (res?.status) {
+              await sendDiscordMessage(
+                `https://discord.com/api/webhooks/1055430732274728961/kEsVt4Oq-oJgPrHKmo5rcjD2X0lRvYTlGNnmtABKHlTQRZAU-vmfjyuFnjgF_tswvgMb`,
+                {
+                  username: xmlURL!
+                    .replaceAll('Discord', 'Dïscord')
+                    .replaceAll('discord', 'dïscord')
+                    .slice(0, 80),
+                  avatar_url: getFaviconURI(url),
+                  content: `Dead link: (${res?.status || `?`}) ${url} (${xmlURL})`,
+                },
+              )
+            }
+
             return
           }
 
