@@ -36,4 +36,4 @@ jobs:
           author_email: bot@users.noreply.github.com
           message: Update Data
           fetch: false
-          # pull: '--rebase --autostash'
+          pull: '--rebase --autostash'

@@ -9,8 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean": "rm -rf node_modules .next out dist .wrangler bun.lockb",
     "add:component": "shadcn-ui add",
+    "clean": "rm -rf node_modules .next out dist .wrangler bun.lockb",
     "check": "ncu",
     "bump": "ncu -u"
   },
