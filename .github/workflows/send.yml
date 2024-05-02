@@ -39,3 +39,4 @@ jobs:
       - run: bun run tsx scripts/crons/run.ts
         env:
           GITHUB_PAT: ${{ secrets.PAT }}
+        continue-on-error: true
