@@ -1,0 +1,33 @@
+name: Token
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+
+jobs:
+  token:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+
+      - uses: actions/checkout@master
+
+      - run: bun i
+      - run: bun run tsx scripts/crons/token.ts
+
+      - uses: EndBug/add-and-commit@main
+        with:
+          author_name: Bot
+          author_email: bot@users.noreply.github.com
+          message: Update Token
+          # pull: '--rebase --autostash'

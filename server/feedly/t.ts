@@ -210,5 +210,5 @@ export const getAuth = async () => {
 
   let json: any = await r5.json()
 
-  return { token: json.access_token }
+  return { token: json.access_token as string }
 }

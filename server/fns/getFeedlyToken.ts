@@ -10,5 +10,5 @@ export const getFeedlyToken = memoize(async () => {
 
   const { token } = json
 
-  return token
+  return token as string
 })
