@@ -7,6 +7,10 @@ on:
     branches:
       - main
 
+  # cron once every monday, thursday
+  schedule:
+    - cron: '0 0 * * 1,4'
+
 jobs:
   token:
     runs-on: ubuntu-latest

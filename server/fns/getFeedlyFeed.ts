@@ -1,12 +1,11 @@
-import { getFeedlyToken } from 'server/fns/getFeedlyToken'
+import { getToken } from 'server/fns/getFeedlyToken'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getFaviconURI } from 'utils/getFaviconURI'
 import { getProxy } from 'utils/proxy'
 
 export const getFeedlyFeed = async (url: string) => {
-  const t = await getFeedlyToken()
+  const t = await getToken()
 
-  console.log({ t })
   const data = await fetch(
     `${getProxy()}https://api.feedly.com/v3/search/feeds?${new URLSearchParams({
       q: url!,

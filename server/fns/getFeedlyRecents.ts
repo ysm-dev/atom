@@ -1,4 +1,4 @@
-import { getFeedlyToken } from 'server/fns/getFeedlyToken'
+import { getToken } from 'server/fns/getFeedlyToken'
 
 type Params = {
   url: string
@@ -9,7 +9,7 @@ type Params = {
 export const getFeedlyRecents = async (params: Params) => {
   const { url, xmlURL, limit = 30 } = params
 
-  const t = await getFeedlyToken()
+  const t = await getToken()
 
   const json = await fetch(
     `https://api.feedly.com/v3/feeds/feed%2F${encodeURIComponent(
