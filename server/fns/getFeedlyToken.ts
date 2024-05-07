@@ -1,8 +1,7 @@
 import { memoize } from '@fxts/core'
-import { getServerURL } from 'utils/getServerURL'
 
 export const getFeedlyToken = memoize(async () => {
-  const json = await fetch(`${getServerURL()}/feedly/t`, {
+  const json = await fetch(`https://atom.ysmdev.workers.dev/feedly/t`, {
     headers: {
       'content-type': 'application/json',
     },

@@ -10,12 +10,13 @@ export const isLocal = () => {
     return globalThis.location.hostname === 'localhost'
   } else {
     if (isWorker()) {
-      console.log({ ENV: ENVIRONMENT.VARS['ENV'] })
       return ENVIRONMENT.VARS['ENV'] === ENV.LOCAL
     }
 
     if (getRuntimeKey() === 'node') {
       return global?.process.env.NEXT_PUBLIC_ENV === ENV.LOCAL
     }
+
+    return false
   }
 }
