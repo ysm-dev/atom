@@ -24,6 +24,10 @@ jobs:
         with:
           bun-version: latest
 
+      - uses: actions/setup-node@main
+        with:
+          node-version: 20
+
       - uses: actions/checkout@master
 
       - run: bun i
