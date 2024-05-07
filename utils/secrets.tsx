@@ -31,4 +31,7 @@ type ENV = {
   DATABASE_URL: string
   // export const DISCORD_BOT_TOKEN =
   DISCORD_BOT_TOKEN: string
+
+  FEEDLY_EMAIL: string
+  FEEDLY_PW: string
 }

@@ -1,7 +1,7 @@
 import { memoize } from '@fxts/core'
 import { load } from 'cheerio'
 import { Hono } from 'hono'
-import { ENVIRONMENT } from 'utils/env'
+import { env } from 'utils/secrets'
 
 const getRandom = memoize(async () => {
   function y(e: string) {
@@ -123,8 +123,12 @@ export const getAuth = async () => {
 
   let csrf = $('input[name="csrfToken"]').attr('value')!
 
-  let email = ENVIRONMENT.VARS.FEEDLY_EMAIL
-  let pw = ENVIRONMENT.VARS.FEEDLY_PW
+  let email = env().FEEDLY_EMAIL
+  let pw = env().FEEDLY_PW
+
+  if (!email || !pw) {
+    throw new Error('FEEDLY_EMAIL or FEEDLY_PW is not set')
+  }
 
   referrer = url1
   url1 = `https://feedly.com/v3/auth/login/checkEmail?${new URLSearchParams({
@@ -182,7 +186,7 @@ export const getAuth = async () => {
 
   txt = await r4.text()
 
-  let location = r4.headers.get('location')
+  let location = r4.headers.get('Location')
 
   url = new URL(location!)
 

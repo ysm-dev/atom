@@ -1,8 +1,10 @@
+import 'dotenv/config'
+
 import { writeFile } from 'fs/promises'
-import { getFeedlyToken } from 'server/fns/getFeedlyToken'
+import { getAuth } from 'server/feedly/t'
 
 export const run = async () => {
-  const token = await getFeedlyToken()
+  const { token } = await getAuth()
 
   await writeFile('./constants/f.token', token)
 }

@@ -28,6 +28,9 @@ jobs:
 
       - run: bun i
       - run: bun run tsx scripts/crons/token.ts
+        env:
+          FEEDLY_EMAIL: ${{ secrets.FEEDLY_EMAIL }}
+          FEEDLY_PW: ${{ secrets.FEEDLY_PW }}
 
       - uses: EndBug/add-and-commit@main
         with:
