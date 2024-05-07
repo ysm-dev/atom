@@ -1,9 +1,12 @@
+import { getFeedlyToken } from 'server/fns/getFeedlyToken'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getFaviconURI } from 'utils/getFaviconURI'
 import { getProxy } from 'utils/proxy'
-import { FEEDLY_TOKEN } from 'utils/secrets'
 
 export const getFeedlyFeed = async (url: string) => {
+  const t = await getFeedlyToken()
+
+  console.log({ t })
   const data = await fetch(
     `${getProxy()}https://api.feedly.com/v3/search/feeds?${new URLSearchParams({
       q: url!,
@@ -18,7 +21,7 @@ export const getFeedlyFeed = async (url: string) => {
     })}`,
     {
       headers: {
-        Authorization: `Bearer ${FEEDLY_TOKEN}`,
+        Authorization: `Bearer ${t}`,
         'Content-Type': 'application/json',
         'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36`,
         Origin: `https://feedly.com`,
