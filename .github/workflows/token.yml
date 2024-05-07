@@ -14,7 +14,7 @@ on:
 jobs:
   token:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 3
 
     permissions:
       contents: write
