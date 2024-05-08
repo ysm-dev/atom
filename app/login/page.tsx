@@ -2,18 +2,24 @@
 
 import { IconBrandDiscord } from '@tabler/icons-react'
 import { Button } from 'components/ui/button'
-import { getBaseURL } from 'utils/getBaseURL'
+import { isServer } from 'utils/isServer'
 
 const DISCORD_CLIENT_ID = `1170597393272668200`
 
 const REDIRECT_PATH = '/oauth/discord'
 
-const REDIRECT_URI = `${getBaseURL()}${REDIRECT_PATH}`
+const getRedirectURI = () => {
+  if (isServer()) {
+    return REDIRECT_PATH
+  } else {
+    return `${window.location.origin}${REDIRECT_PATH}`
+  }
+}
 
 export default function Page() {
   const href = `https://discord.com/api/oauth2/authorize?${new URLSearchParams({
     client_id: DISCORD_CLIENT_ID,
-    redirect_uri: REDIRECT_URI,
+    redirect_uri: getRedirectURI(),
     response_type: 'code',
     // https://discord.com/developers/applications/1125294392031326229/oauth2/url-generator
     permissions: '536870912',

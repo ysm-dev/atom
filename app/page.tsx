@@ -1,10 +1,5 @@
-import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export default function Page() {
-  return (
-    <div className="flex">
-      <h1 className="p-2 text-2xl">Hello, Next.js!</h1>
-      <Link href="/login">Page2</Link>
-    </div>
-  )
+  redirect('/dashboard')
 }
