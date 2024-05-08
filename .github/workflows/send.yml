@@ -5,13 +5,13 @@ on:
     workflows: [Job]
     types:
       - completed
+
   workflow_dispatch:
 
 jobs:
   send:
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    continue-on-error: true
 
     permissions:
       contents: write
@@ -30,6 +30,7 @@ jobs:
           GITHUB_PAT: ${{ secrets.PAT }}
 
       - uses: EndBug/add-and-commit@main
+        continue-on-error: true
         with:
           author_name: Bot
           author_email: bot@users.noreply.github.com
@@ -37,6 +38,7 @@ jobs:
           fetch: false
           # pull: '--rebase --autostash'
 
+      - uses: oven-sh/setup-bun@main
       - run: bun run tsx scripts/crons/run.ts
         env:
           GITHUB_PAT: ${{ secrets.PAT }}
