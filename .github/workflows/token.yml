@@ -36,10 +36,6 @@ jobs:
           FEEDLY_EMAIL: ${{ secrets.FEEDLY_EMAIL }}
           FEEDLY_PW: ${{ secrets.FEEDLY_PW }}
 
-      - uses: EndBug/add-and-commit@main
+      - uses: stefanzweifel/git-auto-commit-action@master
         with:
-          author_name: Bot
-          author_email: bot@users.noreply.github.com
-          message: Update Token
-          fetch: false
-          # pull: '--rebase --autostash'
+          skip_fetch: true
