@@ -30,10 +30,14 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - uses: EndBug/add-and-commit@main
+      - uses: stefanzweifel/git-auto-commit-action@master
         with:
-          author_name: Bot
-          author_email: bot@users.noreply.github.com
-          message: Update Data
-          fetch: false
-          # pull: '--rebase --autostash'
+          skip_fetch: true
+
+      # - uses: EndBug/add-and-commit@main
+      #   with:
+      #     author_name: Bot
+      #     author_email: bot@users.noreply.github.com
+      #     message: Update Data
+      #     fetch: false
+      # pull: '--rebase --autostash'
