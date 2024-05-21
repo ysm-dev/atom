@@ -12,10 +12,10 @@ export const getFeedlyToken = memoize(async () => {
   return token as string
 })
 
-export const getToken = memoize(async () => {
+export const getToken = async () => {
   const t = await fetch(
     `https://github.com/ysm-dev/atom/raw/main/constants/f.token`,
   ).then<string>((r) => r.text())
 
   return t
-})
+}
