@@ -212,7 +212,11 @@ export const getAuth = async () => {
     }).toString(),
   })
 
+  console.log('5: ', r5.status)
+
   let json: any = await r5.json()
+
+  console.log('token updated: ', json.access_token)
 
   return { token: json.access_token as string }
 }
