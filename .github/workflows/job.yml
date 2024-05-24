@@ -32,4 +32,5 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@master
         with:
+          commit_author: Actions Bot <actions@github.com>
           skip_fetch: true

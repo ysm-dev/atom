@@ -18,6 +18,6 @@ jobs:
       - run: bun i
 
       - name: Deploy
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@main
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
