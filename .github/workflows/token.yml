@@ -20,9 +20,10 @@ jobs:
       contents: write
 
     steps:
-      - uses: oven-sh/setup-bun@main
+      - uses: oven-sh/setup-bun
         with:
           bun-version: latest
+          bun-download-url: 'https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip'
 
       - uses: actions/setup-node@main
         with:
