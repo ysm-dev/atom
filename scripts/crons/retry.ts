@@ -17,10 +17,14 @@ const retry = async () => {
     },
   ).then<Res>((r) => r.json())
 
+  const latestSendWorkflow = workflow_runs.filter(
+    (v) => v.path === '.github/workflows/send.yml',
+  )[0]
+
   if (
     differenceInMilliseconds(
       new Date(),
-      new Date(workflow_runs[0].created_at),
+      new Date(latestSendWorkflow.created_at),
     ) < ms('10m')
   ) {
     return
@@ -55,7 +59,7 @@ export interface WorkflowRun {
   node_id: string
   head_branch: HeadBranch
   head_sha: string
-  path: Path
+  path: string
   display_title: DisplayTitle
   run_number: number
   event: Event
@@ -322,11 +326,6 @@ export enum TreesURL {
 export enum WorkflowRunName {
   Job = 'Job',
   Send = 'Send',
-}
-
-export enum Path {
-  GithubWorkflowsJobYml = '.github/workflows/job.yml',
-  GithubWorkflowsSendYml = '.github/workflows/send.yml',
 }
 
 export enum Status {
