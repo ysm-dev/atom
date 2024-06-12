@@ -27,6 +27,7 @@ type ENV = {
   SECRET: string
   // Worker (scheduled)
   GITHUB_PAT: string
+  GITHUB_PAT_1: string
   // Worker & Github Actions
   DATABASE_URL: string
   // export const DISCORD_BOT_TOKEN =
