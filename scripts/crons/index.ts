@@ -18,10 +18,10 @@ import { type Channels } from 'server/feeds'
 import { textToBinary } from 'utils/binary'
 import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getFaviconURI } from 'utils/getFaviconURI'
+import { getServerURL } from 'utils/getServerURL'
 import { isRSS } from 'utils/isRSS'
 import { isURL } from 'utils/isURL'
 import { stringify } from 'utils/json'
-import { getProxy } from 'utils/proxy'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
@@ -47,24 +47,32 @@ async function main() {
     throw new Error(`No data found for guild ${GUILD_ID}`)
   }
 
-  // pipe(
+  // const result = pipe(
   //   data,
   //   values,
   //   map((ch) => {
-  //     console.log(ch.name, Object.values(ch.feeds).length)
-  //     pipe(
-  //       ch.feeds,
-  //       values,
-  //       map((feed) => {
-  //         console.log(`  ${feed.url}`)
-  //         return feed
-  //       }),
-  //       toArray,
-  //     )
-  //     return ch
+  //     if (!ch.parent_id) {
+  //       return null
+  //     }
+  //     return [
+  //       `${data[ch.parent_id].name}/${ch.name}`,
+  //       pipe(
+  //         ch.feeds,
+  //         values,
+  //         toArray,
+  //       ),
+  //     ]
   //   }),
+  //   filter(Boolean),
   //   toArray,
+  //   Object.fromEntries,
   // )
+
+  // console.log(JSON.stringify(result, null, 2))
+
+  // await writeFile(`./feeds.json`, JSON.stringify(result, null, 2))
+
+  // return
 
   let now = performance.now()
 
@@ -98,7 +106,7 @@ async function main() {
           let res: FetchResponse<any> | null = await fetch(xmlURL!)
             .then((res) => {
               if (!res.ok) {
-                return fetch(`${getProxy()}${xmlURL}`).catch((e) => {
+                return fetch(`${getServerURL()}/proxy/${xmlURL}`).catch((e) => {
                   console.error(`Failed to fetch ${url}`, e)
                   return res
                 })
@@ -107,7 +115,7 @@ async function main() {
               }
             })
             .catch((e) => {
-              return fetch(`${getProxy()}${xmlURL}`).catch((e) => {
+              return fetch(`${getServerURL()}/proxy/${xmlURL}`).catch((e) => {
                 console.error(`Failed to fetch ${url}`, e)
                 return null
               })
