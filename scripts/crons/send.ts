@@ -140,7 +140,7 @@ async function main() {
 
                   if (id) {
                     archive(itemLink)
-                    await Promise.all([writeFile(`./state/${cid}.bin`, 'true')])
+                    await Promise.all([writeFile(`./state/${cid}.bin`, '')])
                   }
 
                   console.log(`Sent ${itemLink} to ${name}`)
