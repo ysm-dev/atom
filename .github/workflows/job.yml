@@ -1,0 +1,37 @@
+name: Job
+
+on:
+  repository_dispatch:
+    types:
+      - update
+  # workflow_run:
+  #   workflows: [Send]
+  #   types:
+  #     - completed
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+          bun-download-url: 'https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip'
+
+      - uses: actions/checkout@master
+
+      - run: bun i
+      - run: bun run tsx scripts/crons/index.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - uses: stefanzweifel/git-auto-commit-action@master
+        with:
+          commit_author: Actions Bot <actions@github.com>
+          skip_fetch: true
