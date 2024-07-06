@@ -30,6 +30,12 @@
       "scripts/*": ["./scripts/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "scripts/crons/index.ts"
+  ],
   "exclude": ["node_modules"]
 }
