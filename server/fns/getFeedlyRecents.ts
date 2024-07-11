@@ -32,9 +32,10 @@ export const getFeedlyRecents = async (params: Params) => {
 
   return {
     title,
-    items: recentEntries.map(({ title, alternate, originId }) => ({
+    items: recentEntries.map(({ title, alternate, originId, content }) => ({
       title,
       link: alternate?.[0].href ?? originId,
+      content: content.content,
     })),
   }
 }

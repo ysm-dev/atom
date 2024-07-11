@@ -169,11 +169,11 @@ async function main() {
             stringify({
               title: title ?? new URL(url).hostname,
               link: url,
-              items: items.slice(0, 30).map(({ title, link }) => ({
+              items: items.slice(0, 30).map(({ title, link, content }) => ({
                 title:
                   title && typeof title === 'string'
                     ? decodeHTMLEntities(title)
-                    : 'Untitled',
+                    : content?.slice(0, 1500) ?? 'No content',
                 link: isURL(link)
                   ? decodeHTMLEntities(link!)
                   : `${new URL(url).origin}${link}`,

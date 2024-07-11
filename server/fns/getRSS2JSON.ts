@@ -19,9 +19,10 @@ export const getRSS2JSON = async (params: Params) => {
     },
   ).then<R>((r) => r.json())
 
-  return json.result.map(({ title, links }) => ({
+  return json.result.map(({ title, links, content }) => ({
     title: title.value,
     link: links[0].href,
+    content: content.value,
   }))
 }
 
