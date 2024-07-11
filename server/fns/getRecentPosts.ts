@@ -3,6 +3,7 @@ import { decodeHTMLEntities } from 'utils/decodeHtml'
 import { getServerURL } from 'utils/getServerURL'
 import { isServer } from 'utils/isServer'
 import { isURL } from 'utils/isURL'
+import { turndown } from 'utils/turndown'
 
 type Params = {
   url: string
@@ -30,8 +31,12 @@ export const getRecentPosts = async (params: Params) => {
 
   const { title, items } = rss
 
-  return items.slice(0, limit).map(({ link, title }) => ({
-    title: title ? decodeHTMLEntities(title) : 'Untitled',
+  return items.slice(0, limit).map(({ link, title, content }) => ({
+    title: title
+      ? decodeHTMLEntities(title)
+      : content
+        ? turndown(content)
+        : 'Untitled',
     link: isURL(link) ? link : `${new URL(url!).origin}${link}`,
   }))
 }

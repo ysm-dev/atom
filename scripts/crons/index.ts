@@ -25,6 +25,7 @@ import { getProxy } from 'utils/proxy'
 import { GUILD_ID } from 'utils/secrets'
 import { storage } from 'utils/storage'
 import { toCID } from 'utils/toCID'
+import { turndown } from 'utils/turndown'
 import { $ } from 'zx'
 
 const fetch = ofetch.create({
@@ -173,7 +174,9 @@ async function main() {
                 title:
                   title && typeof title === 'string'
                     ? decodeHTMLEntities(title)
-                    : content?.slice(0, 1500) ?? 'No content',
+                    : content
+                      ? turndown(content).slice(0, 1500)
+                      : 'No Content',
                 link: isURL(link)
                   ? decodeHTMLEntities(link!)
                   : `${new URL(url).origin}${link}`,

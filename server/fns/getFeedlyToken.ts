@@ -14,7 +14,7 @@ export const getFeedlyToken = memoize(async () => {
 
 export const getToken = async () => {
   const t = await fetch(
-    `https://github.com/ysm-dev/atom/raw/main/constants/f.token`,
+    `https://raw.githubusercontent.com/ysm-dev/atom/main/constants/f.token`,
   ).then<string>((r) => r.text())
 
   return t
