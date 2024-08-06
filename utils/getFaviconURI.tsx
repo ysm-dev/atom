@@ -13,7 +13,7 @@ export const getFaviconURI = (url: string): string => {
     return `https://img.ysm.dev/github/${handle}`
   }
 
-  if (host === 'twitter.com') {
+  if (host === 'twitter.com' || host === 'x.com') {
     const [, handle] = pathname.split('/')
     return `https://img.ysm.dev/x/${handle}`
   }
