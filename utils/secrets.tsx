@@ -30,6 +30,7 @@ type ENV = {
   GITHUB_PAT_1: string
   // Worker & Github Actions
   DATABASE_URL: string
+  GITHUB_PAT_2: string
   // export const DISCORD_BOT_TOKEN =
   DISCORD_BOT_TOKEN: string
 
