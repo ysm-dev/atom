@@ -29,7 +29,7 @@ export const archive = async (url: string) => {
       body: JSON.stringify({
         event_type: 'archive',
         client_payload: {
-          url: url.replace('https://', ''),
+          url: url.replace(/https?:\/\//, ''),
         },
       }),
     })
