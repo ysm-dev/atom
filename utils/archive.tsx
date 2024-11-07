@@ -1,18 +1,18 @@
 import { env } from 'utils/secrets'
 
-const sig = `1753246060%201721710060%20VL6cmz1RLtmSVVQpn4ht1FlY5IKUSHNmj6IchqcdnnQ1qVN6QqBIOPtyh0%2BfunRnynvqsB5gtSY%2BRtcrDFpfNHmeINOAqT9Pf5SyuwOdv6SgiY2KkiSSoL0pqrNIzd1IcqVEmDyR13NQ55F0Sbxvlk7TLfyxQhouzYjxz86IL8M%3D`
-const email = `stale_labs.0c%40icloud.com`
 
 export const archive = async (url: string) => {
   return Promise.all([
     fetch('https://chrome-api.archive.org/save', {
       method: 'POST',
       headers: {
-        accept: 'application/json',
+        accept: 'text/html,application/xhtml+xml,application/xml',
         'content-type': 'application/x-www-form-urlencoded',
-        Cookie: `logged-in-sig=${sig}; logged-in-user=${email};`,
       },
-      body: new URLSearchParams({ url }),
+      body: new URLSearchParams({
+        'capture_all': '1',
+        url
+      }),
     })
       .then<R>((r) => r.json())
       .catch((e) => {
