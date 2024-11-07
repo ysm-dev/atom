@@ -1,6 +1,5 @@
 import { env } from 'utils/secrets'
 
-
 export const archive = async (url: string) => {
   return Promise.all([
     fetch('https://chrome-api.archive.org/save', {
