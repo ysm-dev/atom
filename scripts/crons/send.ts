@@ -8,18 +8,19 @@ import {
   toArray,
   toAsync,
   values,
-} from '@fxts/core'
-import { readFile, writeFile } from 'fs/promises'
-import { sendDiscordMessage } from 'lib/sendDiscordMessage'
-import { type Channels } from 'server/feeds'
-import { archive } from 'utils/archive'
-import { binaryToText, textToBinary } from 'utils/binary'
-import { getFaviconURI } from 'utils/getFaviconURI'
-import { isURL } from 'utils/isURL'
-import { parse, stringify } from 'utils/json'
-import { GUILD_ID } from 'utils/secrets'
-import { storage } from 'utils/storage'
-import { toCID } from 'utils/toCID'
+} from "@fxts/core"
+import { readFile, writeFile } from "fs/promises"
+import { sendDiscordMessage } from "lib/sendDiscordMessage"
+import { getItemLink } from "scripts/crons/fns/getItemLink"
+import { type Channels } from "server/feeds"
+import { archive } from "utils/archive"
+import { binaryToText, textToBinary } from "utils/binary"
+import { getFaviconURI } from "utils/getFaviconURI"
+import { isURL } from "utils/isURL"
+import { parse, stringify } from "utils/json"
+import { GUILD_ID } from "utils/secrets"
+import { storage } from "utils/storage"
+import { toCID } from "utils/toCID"
 
 // ysm's server
 // const guild_id = `1166351747346870372`
@@ -53,7 +54,7 @@ async function main() {
       const channel_cid = await toCID(channel_id)
       const stateString = await readFile(
         `./state/${channel_cid}.bin`,
-        'binary',
+        "binary",
       ).catch(() => null)
 
       let state: State | null = null
@@ -74,7 +75,7 @@ async function main() {
           const [cid] = await Promise.all([toCID(url)])
 
           const [json] = await Promise.all([
-            readFile(`./generated/${cid}.bin`, 'binary').catch(() => null),
+            readFile(`./generated/${cid}.bin`, "binary").catch(() => null),
           ])
 
           return {
@@ -121,26 +122,25 @@ async function main() {
 
                 const result = await readFile(
                   `./state/${cid}.bin`,
-                  'binary',
+                  "binary",
                 ).catch(() => null)
 
                 if (result == null) {
                   const { id } = await sendDiscordMessage(webhookURL, {
                     username:
                       title
-                        .replaceAll('Discord', 'Dïscord')
-                        .replaceAll('discord', 'dïscord')
+                        .replaceAll("Discord", "Dïscord")
+                        .replaceAll("discord", "dïscord")
                         .slice(0, 80) ?? url,
                     avatar_url: getFaviconURI(itemLink),
-                    content: `${itemLink}\n\n${itemTitle.trim()}`.slice(
-                      0,
-                      2000,
-                    ),
+                    content: `${getItemLink(
+                      itemLink,
+                    )}\n\n${itemTitle.trim()}`.slice(0, 2000),
                   })
 
                   if (id) {
                     archive(itemLink)
-                    await Promise.all([writeFile(`./state/${cid}.bin`, '')])
+                    await Promise.all([writeFile(`./state/${cid}.bin`, "")])
                   }
 
                   console.log(`Sent ${itemLink} to ${name}`)
@@ -178,7 +178,7 @@ async function main() {
         await writeFile(
           `./state/${channel_cid}.bin`,
           textToBinary(stringify(state)),
-          'binary',
+          "binary",
         )
       }
     }),
