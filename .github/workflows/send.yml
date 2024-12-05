@@ -2,7 +2,7 @@ name: Send
 
 on:
   workflow_run:
-    workflows: [Job]
+    workflows: [Update]
     types:
       - completed
 
