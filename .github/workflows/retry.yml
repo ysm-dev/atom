@@ -1,0 +1,26 @@
+name: Retry
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+          bun-download-url: 'https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip'
+
+      - uses: actions/checkout@master
+
+      - run: bun i
+      - run: bun run tsx scripts/crons/retry.ts
+        env:
+          GITHUB_PAT: ${{ secrets.PAT }}
+          GITHUB_PAT_1: ${{ secrets.PAT_1 }}

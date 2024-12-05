@@ -1,0 +1,51 @@
+name: Update
+
+on:
+  repository_dispatch:
+    types:
+      - update
+
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@master
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+          bun-download-url: "https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
+
+      - run: bun i
+      - run: bun run tsx scripts/crons/index.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Check and commit if changes exist
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "Actions"
+
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+            git commit -m "By Actions"
+            
+            for i in {1..100}; do
+              git pull --rebase --autostash && git push && break
+
+              if [ $i -eq 100 ]; then
+                echo "Failed to push after 100 attempts"
+                exit 1
+              fi
+
+              sleep 5
+            done
+          else
+            echo "No changes to commit"
+          fi

@@ -1,0 +1,55 @@
+name: Send
+
+on:
+  workflow_run:
+    workflows: [Job]
+    types:
+      - completed
+
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+          bun-download-url: "https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
+
+      - uses: actions/checkout@master
+
+      - run: bun i
+      - run: bun run tsx scripts/crons/send.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GITHUB_PAT: ${{ secrets.PAT }}
+          GITHUB_PAT_2: ${{ secrets.PAT_2 }}
+
+      - name: Commit
+        uses: nick-fields/retry@master
+        with:
+          timeout_minutes: 120
+          max_attempts: 10000
+          command: |
+            if [[ -n "$(git status --porcelain)" ]]; then
+              git config user.email "actions@github.com"
+              git config user.name "Actions"
+              git pull --rebase --autostash
+              git add .
+              git commit -m "Archive"
+              git push
+            else
+              echo "No changes to commit"
+              exit 0
+            fi
+
+      - run: bun run tsx scripts/crons/run.ts
+        env:
+          GITHUB_PAT: ${{ secrets.PAT }}
+          GITHUB_PAT_2: ${{ secrets.PAT_2 }}

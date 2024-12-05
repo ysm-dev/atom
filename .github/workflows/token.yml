@@ -1,0 +1,56 @@
+name: Token
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+
+  # cron once every monday, thursday
+  schedule:
+    - cron: "0 0 * * 1,4"
+
+jobs:
+  token:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+          bun-download-url: "https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
+
+      - uses: actions/setup-node@main
+        with:
+          node-version: 20
+
+      - uses: actions/checkout@master
+
+      - run: bun i
+      - run: bun run tsx scripts/crons/token.ts
+        env:
+          FEEDLY_EMAIL: ${{ secrets.FEEDLY_EMAIL }}
+          FEEDLY_PW: ${{ secrets.FEEDLY_PW }}
+
+      - name: Commit
+        uses: nick-fields/retry@master
+        with:
+          timeout_minutes: 120
+          max_attempts: 10000
+          command: |
+            if [[ -n "$(git status --porcelain)" ]]; then
+              git config user.email "actions@github.com"
+              git config user.name "Actions"
+              git pull --rebase --autostash
+              git add .
+              git commit -m "Archive"
+              git push
+            else
+              echo "No changes to commit"
+              exit 0
+            fi
