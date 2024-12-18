@@ -22,9 +22,6 @@ import { GUILD_ID } from "utils/secrets"
 import { storage } from "utils/storage"
 import { toCID } from "utils/toCID"
 
-// ysm's server
-// const guild_id = `1166351747346870372`
-
 type State = {
   [url: string]: {
     title: string
@@ -94,7 +91,7 @@ async function main() {
             items: { title: string; link: string }[]
           }
 
-          if (!json) {
+          if (!json || !url || !cid) {
             console.log(`Failed!!: `, url, xmlURL)
             return
           }

@@ -15,8 +15,8 @@ export const archive = async (url: string) => {
     })
       .then<R>((r) => r.json())
       .catch((e) => {
-        console.error('Error archiving: ', url)
-        console.error(e)
+        console.error('Error Wayback archiving: ', url)
+        // console.error(e)
       }),
     fetch(`https://api.github.com/repos/howrs/archive/dispatches`, {
       method: 'POST',
@@ -34,8 +34,8 @@ export const archive = async (url: string) => {
     })
       .then<R>((r) => r.json())
       .catch((e) => {
-        console.error('Error archiving: ', url)
-        console.error(e)
+        console.error('Error GitHub archiving: ', url)
+        // console.error(e)
       }),
   ])
 }
