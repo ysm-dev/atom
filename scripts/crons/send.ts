@@ -118,7 +118,7 @@ async function main() {
                 const cid = await toCID(`${channel_id}:${itemLink}}`)
 
                 const result = await readFile(
-                  `./state/${cid}.bin`,
+                  `./state/sent/${cid}.bin`,
                   "binary",
                 ).catch(() => null)
 
@@ -137,7 +137,7 @@ async function main() {
 
                   if (id) {
                     archive(itemLink)
-                    await Promise.all([writeFile(`./state/${cid}.bin`, "")])
+                    await Promise.all([writeFile(`./state/sent/${cid}.bin`, "")])
                   }
 
                   console.log(`Sent ${itemLink} to ${name}`)

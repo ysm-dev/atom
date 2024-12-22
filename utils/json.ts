@@ -1,7 +1,7 @@
-import { parse as Sparse, stringify as Sstringify } from 'superjson'
+import destr from 'destr'
 
 // export const parse = JSON.parse
-export const parse = Sparse
+export const parse = destr
 
 // export const stringify = JSON.stringify
-export const stringify = Sstringify
+export const stringify = JSON.stringify
