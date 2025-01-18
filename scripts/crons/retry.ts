@@ -1,46 +1,43 @@
-import { differenceInMilliseconds } from 'date-fns'
-import ms from 'ms'
-import { env } from 'utils/secrets'
+import { filter, first, pipe } from "@fxts/core"
+import { env } from "utils/secrets"
 
 const retry = async () => {
   const PAT_1 = env().GITHUB_PAT_1
   const PAT = env().GITHUB_PAT
 
   const { workflow_runs } = await fetch(
-    'https://api.github.com/repos/ysm-dev/atom/actions/runs',
+    "https://api.github.com/repos/ysm-dev/atom/actions/runs",
     {
       headers: {
-        Accept: 'application/vnd.github+json',
+        Accept: "application/vnd.github+json",
         Authorization: `Bearer ${PAT_1}`,
-        'X-GitHub-Api-Version': '2022-11-28',
+        "X-GitHub-Api-Version": "2022-11-28",
       },
     },
   ).then<Res>((r) => r.json())
 
-  const latestSendWorkflow = workflow_runs.filter(
-    (v) => v.path === '.github/workflows/send.yml',
-  )[0]
+  const condition = pipe(
+    workflow_runs,
+    filter((v) => v.path.includes("send.yml") || v.path.includes("update.yml")),
+    filter((v) => v.status === "in_progress"),
+    first,
+  )
 
-  if (
-    differenceInMilliseconds(
-      new Date(),
-      new Date(latestSendWorkflow.created_at),
-    ) < ms('10m')
-  ) {
+  if (condition) {
     return
   }
 
   await Promise.all([
     fetch(`https://api.github.com/repos/ysm-dev/atom/dispatches`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `token ${PAT}`,
-        Accept: 'application/vnd.github+json',
-        'User-Agent': 'insomnia/8.4.5',
+        Accept: "application/vnd.github+json",
+        "User-Agent": "insomnia/8.4.5",
       },
       body: JSON.stringify({
-        event_type: 'update',
+        event_type: "update",
       }),
     }),
   ])
@@ -113,49 +110,49 @@ export interface Actor {
 }
 
 export enum EventsURL {
-  HTTPSAPIGithubCOMUsersYsmDevEventsPrivacy = 'https://api.github.com/users/ysm-dev/events{/privacy}',
+  HTTPSAPIGithubCOMUsersYsmDevEventsPrivacy = "https://api.github.com/users/ysm-dev/events{/privacy}",
 }
 
 export enum FollowingURL {
-  HTTPSAPIGithubCOMUsersYsmDevFollowingOtherUser = 'https://api.github.com/users/ysm-dev/following{/other_user}',
+  HTTPSAPIGithubCOMUsersYsmDevFollowingOtherUser = "https://api.github.com/users/ysm-dev/following{/other_user}",
 }
 
 export enum GistsURL {
-  HTTPSAPIGithubCOMUsersYsmDevGistsGistID = 'https://api.github.com/users/ysm-dev/gists{/gist_id}',
+  HTTPSAPIGithubCOMUsersYsmDevGistsGistID = "https://api.github.com/users/ysm-dev/gists{/gist_id}",
 }
 
 export enum Login {
-  YsmDev = 'ysm-dev',
+  YsmDev = "ysm-dev",
 }
 
 export enum ActorNodeID {
-  MDQ6VXNlcjE4NDg3MjQx = 'MDQ6VXNlcjE4NDg3MjQx',
+  MDQ6VXNlcjE4NDg3MjQx = "MDQ6VXNlcjE4NDg3MjQx",
 }
 
 export enum StarredURL {
-  HTTPSAPIGithubCOMUsersYsmDevStarredOwnerRepo = 'https://api.github.com/users/ysm-dev/starred{/owner}{/repo}',
+  HTTPSAPIGithubCOMUsersYsmDevStarredOwnerRepo = "https://api.github.com/users/ysm-dev/starred{/owner}{/repo}",
 }
 
 export enum Type {
-  User = 'User',
+  User = "User",
 }
 
 export enum Conclusion {
-  Success = 'success',
+  Success = "success",
 }
 
 export enum DisplayTitle {
-  Send = 'Send',
-  Update = 'update',
+  Send = "Send",
+  Update = "update",
 }
 
 export enum Event {
-  RepositoryDispatch = 'repository_dispatch',
-  WorkflowRun = 'workflow_run',
+  RepositoryDispatch = "repository_dispatch",
+  WorkflowRun = "workflow_run",
 }
 
 export enum HeadBranch {
-  Main = 'main',
+  Main = "main",
 }
 
 export interface HeadCommit {
@@ -173,17 +170,17 @@ export interface Author {
 }
 
 export enum Email {
-  ActionsGithubCOM = 'actions@github.com',
-  The41898282GithubActionsBotUsersNoreplyGithubCOM = '41898282+github-actions[bot]@users.noreply.github.com',
+  ActionsGithubCOM = "actions@github.com",
+  The41898282GithubActionsBotUsersNoreplyGithubCOM = "41898282+github-actions[bot]@users.noreply.github.com",
 }
 
 export enum AuthorName {
-  ActionsBot = 'Actions Bot',
-  GithubActionsBot = 'github-actions[bot]',
+  ActionsBot = "Actions Bot",
+  GithubActionsBot = "github-actions[bot]",
 }
 
 export enum Message {
-  ApplyAutomaticChanges = 'Apply automatic changes',
+  ApplyAutomaticChanges = "Apply automatic changes",
 }
 
 export interface Repository {
@@ -236,99 +233,99 @@ export interface Repository {
 }
 
 export enum ArchiveURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomArchiveFormatRef = 'https://api.github.com/repos/ysm-dev/atom/{archive_format}{/ref}',
+  HTTPSAPIGithubCOMReposYsmDevAtomArchiveFormatRef = "https://api.github.com/repos/ysm-dev/atom/{archive_format}{/ref}",
 }
 
 export enum AssigneesURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomAssigneesUser = 'https://api.github.com/repos/ysm-dev/atom/assignees{/user}',
+  HTTPSAPIGithubCOMReposYsmDevAtomAssigneesUser = "https://api.github.com/repos/ysm-dev/atom/assignees{/user}",
 }
 
 export enum BlobsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomGitBlobsSHA = 'https://api.github.com/repos/ysm-dev/atom/git/blobs{/sha}',
+  HTTPSAPIGithubCOMReposYsmDevAtomGitBlobsSHA = "https://api.github.com/repos/ysm-dev/atom/git/blobs{/sha}",
 }
 
 export enum BranchesURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomBranchesBranch = 'https://api.github.com/repos/ysm-dev/atom/branches{/branch}',
+  HTTPSAPIGithubCOMReposYsmDevAtomBranchesBranch = "https://api.github.com/repos/ysm-dev/atom/branches{/branch}",
 }
 
 export enum CommentsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomCommentsNumber = 'https://api.github.com/repos/ysm-dev/atom/comments{/number}',
+  HTTPSAPIGithubCOMReposYsmDevAtomCommentsNumber = "https://api.github.com/repos/ysm-dev/atom/comments{/number}",
 }
 
 export enum CommitsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomCommitsSHA = 'https://api.github.com/repos/ysm-dev/atom/commits{/sha}',
+  HTTPSAPIGithubCOMReposYsmDevAtomCommitsSHA = "https://api.github.com/repos/ysm-dev/atom/commits{/sha}",
 }
 
 export enum ContentsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomContentsPath = 'https://api.github.com/repos/ysm-dev/atom/contents/{+path}',
+  HTTPSAPIGithubCOMReposYsmDevAtomContentsPath = "https://api.github.com/repos/ysm-dev/atom/contents/{+path}",
 }
 
 export enum FullName {
-  YsmDevAtom = 'ysm-dev/atom',
+  YsmDevAtom = "ysm-dev/atom",
 }
 
 export enum GitCommitsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomGitCommitsSHA = 'https://api.github.com/repos/ysm-dev/atom/git/commits{/sha}',
+  HTTPSAPIGithubCOMReposYsmDevAtomGitCommitsSHA = "https://api.github.com/repos/ysm-dev/atom/git/commits{/sha}",
 }
 
 export enum GitRefsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomGitRefsSHA = 'https://api.github.com/repos/ysm-dev/atom/git/refs{/sha}',
+  HTTPSAPIGithubCOMReposYsmDevAtomGitRefsSHA = "https://api.github.com/repos/ysm-dev/atom/git/refs{/sha}",
 }
 
 export enum GitTagsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomGitTagsSHA = 'https://api.github.com/repos/ysm-dev/atom/git/tags{/sha}',
+  HTTPSAPIGithubCOMReposYsmDevAtomGitTagsSHA = "https://api.github.com/repos/ysm-dev/atom/git/tags{/sha}",
 }
 
 export enum IssueEventsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomIssuesEventsNumber = 'https://api.github.com/repos/ysm-dev/atom/issues/events{/number}',
+  HTTPSAPIGithubCOMReposYsmDevAtomIssuesEventsNumber = "https://api.github.com/repos/ysm-dev/atom/issues/events{/number}",
 }
 
 export enum IssuesURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomIssuesNumber = 'https://api.github.com/repos/ysm-dev/atom/issues{/number}',
+  HTTPSAPIGithubCOMReposYsmDevAtomIssuesNumber = "https://api.github.com/repos/ysm-dev/atom/issues{/number}",
 }
 
 export enum KeysURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomKeysKeyID = 'https://api.github.com/repos/ysm-dev/atom/keys{/key_id}',
+  HTTPSAPIGithubCOMReposYsmDevAtomKeysKeyID = "https://api.github.com/repos/ysm-dev/atom/keys{/key_id}",
 }
 
 export enum LabelsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomLabelsName = 'https://api.github.com/repos/ysm-dev/atom/labels{/name}',
+  HTTPSAPIGithubCOMReposYsmDevAtomLabelsName = "https://api.github.com/repos/ysm-dev/atom/labels{/name}",
 }
 
 export enum MilestonesURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomMilestonesNumber = 'https://api.github.com/repos/ysm-dev/atom/milestones{/number}',
+  HTTPSAPIGithubCOMReposYsmDevAtomMilestonesNumber = "https://api.github.com/repos/ysm-dev/atom/milestones{/number}",
 }
 
 export enum HeadRepositoryName {
-  Atom = 'atom',
+  Atom = "atom",
 }
 
 export enum HeadRepositoryNodeID {
-  RKgDOK7EE1Q = 'R_kgDOK7eE1Q',
+  RKgDOK7EE1Q = "R_kgDOK7eE1Q",
 }
 
 export enum PullsURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomPullsNumber = 'https://api.github.com/repos/ysm-dev/atom/pulls{/number}',
+  HTTPSAPIGithubCOMReposYsmDevAtomPullsNumber = "https://api.github.com/repos/ysm-dev/atom/pulls{/number}",
 }
 
 export enum ReleasesURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomReleasesID = 'https://api.github.com/repos/ysm-dev/atom/releases{/id}',
+  HTTPSAPIGithubCOMReposYsmDevAtomReleasesID = "https://api.github.com/repos/ysm-dev/atom/releases{/id}",
 }
 
 export enum StatusesURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomStatusesSHA = 'https://api.github.com/repos/ysm-dev/atom/statuses/{sha}',
+  HTTPSAPIGithubCOMReposYsmDevAtomStatusesSHA = "https://api.github.com/repos/ysm-dev/atom/statuses/{sha}",
 }
 
 export enum TreesURL {
-  HTTPSAPIGithubCOMReposYsmDevAtomGitTreesSHA = 'https://api.github.com/repos/ysm-dev/atom/git/trees{/sha}',
+  HTTPSAPIGithubCOMReposYsmDevAtomGitTreesSHA = "https://api.github.com/repos/ysm-dev/atom/git/trees{/sha}",
 }
 
 export enum WorkflowRunName {
-  Job = 'Job',
-  Send = 'Send',
+  Job = "Job",
+  Send = "Send",
 }
 
 export enum Status {
-  Completed = 'completed',
-  InProgress = 'in_progress',
+  Completed = "completed",
+  InProgress = "in_progress",
 }
