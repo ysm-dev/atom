@@ -1,23 +1,23 @@
-'use client'
+"use client"
 
-import { Badge } from 'components/ui/badge'
-import { Button } from 'components/ui/button'
+import { Badge } from "components/ui/badge"
+import { Button } from "components/ui/button"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from 'components/ui/collapsible'
-import { useChannels } from 'hooks/useChannels'
-import { ChevronDown, Hash } from 'lucide-react'
-import Link from 'next/link'
-import { Fragment } from 'react'
-import { type Channel } from 'server/feeds'
+} from "components/ui/collapsible"
+import { useChannels } from "hooks/useChannels"
+import { ChevronDown, Hash } from "lucide-react"
+import Link from "next/link"
+import { Fragment } from "react"
+import { type Channel } from "server/feeds"
 
 export default function Page() {
   const channels = useChannels()!
 
   return (
-    <section className="mx-auto flex max-w-screen-sm flex-col gap-1">
+    <section className="mx-auto flex max-w-(--breakpoint-sm) flex-col gap-1">
       <div className="flex flex-col px-2">
         {Object.values(channels)
           .filter((channel) => !channel.parent_id)
@@ -45,7 +45,7 @@ const ChannelGroup = ({ channel }: { channel: Channel }) => {
       <CollapsibleTrigger asChild>
         <Button variant="link" className="uppercas w-full justify-start px-2">
           <ChevronDown
-            className={`mr-2 aspect-square h-4 w-4 transform transition group-data-[state=closed]:-rotate-90`}
+            className={`group-data-[state=closed]:-rotate-90 mr-2 aspect-square h-4 w-4 transform transition`}
           />
           {channel.name}
         </Button>

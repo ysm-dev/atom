@@ -1,44 +1,44 @@
-'use client'
+"use client"
 
-import { concurrent, filter, indexBy, map, pipe, toAsync } from '@fxts/core'
+import { concurrent, filter, indexBy, map, pipe, toAsync } from "@fxts/core"
 import {
   QueryObserver,
   useMutation,
   useQueryClient,
-} from '@tanstack/react-query'
-import { Image } from 'components/Image'
-import { Loader } from 'components/Loader'
-import { Button } from 'components/ui/button'
-import { Input } from 'components/ui/input'
-import { Switch } from 'components/ui/switch'
-import { Reorder, motion, useDragControls } from 'framer-motion'
-import { useChannel } from 'hooks/useChannel'
-import { useFeed, type getFeed } from 'hooks/useFeed'
-import { useRecentPosts } from 'hooks/useRecentPosts'
-import { sendDiscordMessage } from 'lib/sendDiscordMessage'
-import { cn } from 'lib/utils'
-import { GripVertical, SendHorizonal } from 'lucide-react'
+} from "@tanstack/react-query"
+import { Image } from "components/Image"
+import { Loader } from "components/Loader"
+import { Button } from "components/ui/button"
+import { Input } from "components/ui/input"
+import { Switch } from "components/ui/switch"
+import { Reorder, motion, useDragControls } from "framer-motion"
+import { useChannel } from "hooks/useChannel"
+import { type getFeed, useFeed } from "hooks/useFeed"
+import { useRecentPosts } from "hooks/useRecentPosts"
+import { sendDiscordMessage } from "lib/sendDiscordMessage"
+import { cn } from "lib/utils"
+import { GripVertical, SendHorizonal } from "lucide-react"
 import {
-  memo,
-  useCallback,
-  useRef,
-  useState,
   type ComponentProps,
   type Dispatch,
   type RefObject,
   type SetStateAction,
-} from 'react'
+  memo,
+  useCallback,
+  useRef,
+  useState,
+} from "react"
 import {
   FormProvider,
   useFieldArray,
   useForm,
   useFormContext,
-} from 'react-hook-form'
-import { type Feed } from 'server/feeds'
-import { toast } from 'sonner'
-import { stringify } from 'superjson'
-import { decodeHTMLEntities } from 'utils/decodeHtml'
-import { isURL } from 'utils/isURL'
+} from "react-hook-form"
+import { type Feed } from "server/feeds"
+import { toast } from "sonner"
+import { stringify } from "superjson"
+import { decodeHTMLEntities } from "utils/decodeHtml"
+import { isURL } from "utils/isURL"
 
 type FormData = {
   feeds: {
@@ -53,9 +53,9 @@ export default function Page() {
 
   const form = useForm<FormData>({
     shouldUnregister: true,
-    criteriaMode: 'all',
-    reValidateMode: 'onChange',
-    mode: 'onChange',
+    criteriaMode: "all",
+    reValidateMode: "onChange",
+    mode: "onChange",
     defaultValues: {
       feeds: [
         ...Object.values(channel.feeds).map((feed) => ({
@@ -65,7 +65,7 @@ export default function Page() {
         })),
         {
           id: crypto.randomUUID(),
-          url: '',
+          url: "",
           enabled: true,
         },
       ],
@@ -79,7 +79,7 @@ export default function Page() {
   } = form
 
   const fieldsArray = useFieldArray({
-    name: 'feeds',
+    name: "feeds",
     control,
     shouldUnregister: true,
   })
@@ -122,16 +122,16 @@ export default function Page() {
       map(async (feed) => {
         const result = await new Promise<Awaited<ReturnType<typeof getFeed>>>(
           (resolve) => {
-            const { status, data } = client.getQueryState(['feed', feed.url])!
+            const { status, data } = client.getQueryState(["feed", feed.url])!
 
-            if (status === 'success') {
+            if (status === "success") {
               resolve(data as Awaited<ReturnType<typeof getFeed>>)
             }
 
             const unsubscribe = new QueryObserver(client, {
-              queryKey: ['feed', feed.url],
+              queryKey: ["feed", feed.url],
             }).subscribe(({ data, status }) => {
-              if (status === 'success') {
+              if (status === "success") {
                 resolve(data as Awaited<ReturnType<typeof getFeed>>)
                 unsubscribe()
               }
@@ -142,7 +142,7 @@ export default function Page() {
         return {
           ...feed,
           id: feed?.id ?? crypto.randomUUID(),
-          url: feed?.url ?? '',
+          url: feed?.url ?? "",
           enabled: feed?.enabled ?? true,
           xmlURL: result?.xmlURL,
           htmlURL: result?.htmlURL,
@@ -183,7 +183,7 @@ export default function Page() {
   const save = useCallback(
     () =>
       formRef.current?.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
+        new Event("submit", { cancelable: true, bubbles: true }),
       ),
     [formRef],
   )
@@ -191,12 +191,12 @@ export default function Page() {
   return (
     <div className="relative">
       {isSubmitting && (
-        <Loader className="fixed right-1 top-1 aspect-square h-4 w-4" />
+        <Loader className="fixed top-1 right-1 aspect-square h-4 w-4" />
       )}
       <FormProvider {...form}>
         <form
           id="form"
-          className="mx-auto flex w-full max-w-screen-sm flex-col gap-1"
+          className="mx-auto flex w-full max-w-(--breakpoint-sm) flex-col gap-1"
           onSubmit={onSubmit}
           ref={formRef}
         >
@@ -245,7 +245,7 @@ type InputItemProps = {
     >
   >
   save: () => void
-} & Omit<ComponentProps<typeof Reorder.Item>, 'value'>
+} & Omit<ComponentProps<typeof Reorder.Item>, "value">
 
 const InputItem = memo(
   ({
@@ -294,8 +294,8 @@ const InputItem = memo(
         await sendDiscordMessage(webhookURL, {
           username:
             title
-              ?.replaceAll('Discord', 'Dïscord')
-              .replaceAll('discord', 'dïscord')
+              ?.replaceAll("Discord", "Dïscord")
+              .replaceAll("discord", "dïscord")
               .slice(0, 80) ?? url!,
           avatar_url: favicon!,
           content:
@@ -334,21 +334,21 @@ const InputItem = memo(
             controls.start(e)
             e.preventDefault()
           }}
-          whileTap={{ cursor: 'grabbing' }}
+          whileTap={{ cursor: "grabbing" }}
           onPointerUp={() => setDragging(false)}
         >
           <GripVertical className="h-5 w-4 text-neutral-600" />
         </motion.div>
         <Input className="hidden" {...register(`feeds.${i}.id` as const)} />
-        <div className={cn('relative flex flex-1', !enabled && 'opacity-50')}>
+        <div className={cn("relative flex flex-1", !enabled && "opacity-50")}>
           <Input
             className={cn(
-              'h-6 overflow-hidden bg-black px-1.5 pr-7 text-xs',
+              "h-6 overflow-hidden bg-black px-1.5 pr-7 text-xs",
               isSuccess === undefined || !enabled
-                ? 'border-input'
+                ? "border-input"
                 : !!isSuccess
-                  ? 'border-green-500'
-                  : 'border-red-500',
+                  ? "border-green-500"
+                  : "border-red-500",
             )}
             {...register(`feeds.${i}.url` as const, {
               value: item.url,
@@ -362,11 +362,11 @@ const InputItem = memo(
             }}
             // When user press "enter" key
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 e.preventDefault()
                 const item = {
                   id: crypto.randomUUID(),
-                  url: '',
+                  url: "",
                   enabled: true,
                 }
 
@@ -381,7 +381,7 @@ const InputItem = memo(
 
                 save()
                 // if backspace key is pressed and input is empty
-              } else if (e.key === 'Backspace' && !e.currentTarget.value) {
+              } else if (e.key === "Backspace" && !e.currentTarget.value) {
                 e.preventDefault()
                 if (i === 0) return
                 // remove item
@@ -399,11 +399,11 @@ const InputItem = memo(
 
                 save()
                 // Key up and down
-              } else if (e.key === 'ArrowUp') {
+              } else if (e.key === "ArrowUp") {
                 e.preventDefault()
                 // focus on previous item
                 setFocus(`feeds.${i - 1}.url` as const)
-              } else if (e.key === 'ArrowDown') {
+              } else if (e.key === "ArrowDown") {
                 e.preventDefault()
                 // focus on next item
                 setFocus(`feeds.${i + 1}.url` as const)
@@ -413,11 +413,11 @@ const InputItem = memo(
           {!isURL(url) || !enabled ? (
             <></>
           ) : isPending ? (
-            <div className="absolute right-0 top-0 flex aspect-square h-6 w-6 items-center justify-center">
+            <div className="absolute top-0 right-0 flex aspect-square h-6 w-6 items-center justify-center">
               <Loader className="aspect-square h-4 w-4 animate-spin opacity-50" />
             </div>
           ) : data?.favicon ? (
-            <div className="absolute right-0.5 top-0.5 aspect-square h-5 w-5 rounded-sm bg-black">
+            <div className="absolute top-0.5 right-0.5 aspect-square h-5 w-5 rounded-sm bg-black">
               <Image
                 src={data.favicon}
                 className="aspect-square h-full w-full rounded-full p-px"
